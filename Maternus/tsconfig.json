@@ -1,0 +1,13 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "emitDeclarationOnly": false
+  },
+  "include": [
+    "src",
+    "App.tsx",
+    "App.js"
+  ],
+  "exclude": ["node_modules", "**/node_modules/**"]
+}
