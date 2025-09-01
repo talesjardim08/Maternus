@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, KeyboardAvoidingView, Image, TouchableOpacity, TextInput } from 'react-native';
 
-export default function Cadastro() {
+export default function Cadastro({navigation}) {
   return (
     <KeyboardAvoidingView style={styles.background}>
       <View style={styles.containerLogo}>
@@ -12,7 +12,7 @@ export default function Cadastro() {
         <Text style={styles.tituloCadastro}>Cadastre-se</Text>
         <View style={styles.linkContainer}>
           <Text style={styles.subTexto}>Já tem uma conta?</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text style={styles.hyperlink}> Clique aqui</Text>
           </TouchableOpacity>
         </View>

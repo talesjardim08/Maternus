@@ -1,8 +1,25 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, KeyboardAvoidingView, Image, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView, Image, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import React, {useState} from 'react';
 
-export default function App() {
+export default function Login({navigation}) {
+    const [cpfOuCnpj, setCpfOuCnpj] = useState('');
+    const [senha, setSenha] = useState('');
+
+    const UserTeste = { //Login local de teste para TESTE do front end
+        cpfOuCnpj: '12345678900',
+        senha: 'TAMASOJO3301'
+    };
+
+    const verificarLogin = () =>{
+        if(cpfOuCnpj === UserTeste.cpfOuCnpj && senha === UserTeste.senha){
+            //Fazer navegação com a tela home 
+        }else{
+            Alert.alert('Erro', 'Dados de Login incorretos, Tente novamente');
+        }
+    }
+
   return (
     <KeyboardAvoidingView style={styles.background}>
       <View style={styles.containerLogo}>
@@ -38,7 +55,7 @@ export default function App() {
 
   <View style={styles.linkContainer}>
           <Text style={styles.subTextoLogin}>Ainda não tem conta?</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Cadastro')}>
             <Text style={styles.hyperlinkLogin}> Clique aqui</Text>
           </TouchableOpacity>
         </View>
