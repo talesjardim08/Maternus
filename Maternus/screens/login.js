@@ -36,15 +36,19 @@ export default function Login({navigation}) {
           placeholder="CPF ou CNPJ"
           keyboardType="numeric"
           placeholderTextColor="#aaa"
+          value={cpfOuCnpj}
+          onChangeText={setCpfOuCnpj}
         />
         <TextInput
           style={styles.input}
           placeholder="Senha"
           secureTextEntry={true}
+          value={senha}
+          onChangeText={setSenha}
           placeholderTextColor="#aaa"
         />
 
-        <TouchableOpacity style={styles.botaoEntrar}>
+        <TouchableOpacity style={styles.botaoEntrar} onPress={verificarLogin}>
           <Text style={styles.textoBotao}>Entrar</Text>
         </TouchableOpacity>
 
