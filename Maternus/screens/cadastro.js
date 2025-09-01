@@ -1,8 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, KeyboardAvoidingView, Image, TouchableOpacity, TextInput } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
 
-export default function App() {
+export default function Cadastro() {
   return (
     <KeyboardAvoidingView style={styles.background}>
       <View style={styles.containerLogo}>
@@ -10,9 +9,19 @@ export default function App() {
       </View>
 
       <View style={styles.container}>
-        <Text style={styles.textoDeLogin}>Entre com a sua conta!</Text>
-        
-        
+        <Text style={styles.tituloCadastro}>Cadastre-se</Text>
+        <View style={styles.linkContainer}>
+          <Text style={styles.subTexto}>Já tem uma conta?</Text>
+          <TouchableOpacity>
+            <Text style={styles.hyperlink}> Clique aqui</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Nome Completo"
+          placeholderTextColor="#aaa"
+        />
 
         <TextInput
           style={styles.input}
@@ -20,32 +29,23 @@ export default function App() {
           keyboardType="numeric"
           placeholderTextColor="#aaa"
         />
+        <Text style={styles.subInfo}>
+          * Isso irá nos ajudar a selecionar a versão do aplicativo que melhor atende a sua necessidade.
+        </Text>
+
+        {/* Senha */}
         <TextInput
           style={styles.input}
-          placeholder="Senha"
+          placeholder="Senha (Mínimo 8 dígitos)"
           secureTextEntry={true}
           placeholderTextColor="#aaa"
         />
 
-        <TouchableOpacity style={styles.botaoEntrar}>
-          <Text style={styles.textoBotao}>Entrar</Text>
+        {/* Botão Criar */}
+        <TouchableOpacity style={styles.botaoCriar}>
+          <Text style={styles.textoBotao}>Criar</Text>
         </TouchableOpacity>
-
-        <TouchableOpacity style={styles.botaoGoogle}>
-          <AntDesign name="google" size={20} color="#000" />
-          <Text style={styles.textoBotaoGoogle}>Entrar com o Google</Text>
-        </TouchableOpacity>
-
-  <View style={styles.linkContainer}>
-          <Text style={styles.subTextoLogin}>Ainda não tem conta?</Text>
-          <TouchableOpacity>
-            <Text style={styles.hyperlinkLogin}> Clique aqui</Text>
-          </TouchableOpacity>
-        </View>
-
       </View>
-
-
 
       <StatusBar style="auto" />
     </KeyboardAvoidingView>
@@ -76,65 +76,55 @@ const styles = StyleSheet.create({
     width: '80%',
     alignItems: 'center',
   },
-  textoDeLogin: {
+   tituloCadastro: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
     color: '#333',
   },
+  linkContainer: {
+    flexDirection: 'row',
+    marginBottom: 20,
+  },
+  subTexto: {
+    fontSize: 14,
+    color: '#555',
+  },
+  hyperlink: {
+    fontSize: 14,
+    color: '#8A65FF',
+    fontWeight: 'bold',
+  },
   input: {
     width: '100%',
     backgroundColor: '#fff',
-    marginBottom: 15,
+    marginTop: 10,
+    marginBottom: 10,
     color: '#000',
     fontSize: 16,
-    borderRadius: 15,
+    borderRadius: 10,
     padding: 12,
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderEndColor: '#fff'
+    borderColor: '#ddd',
   },
-  botaoEntrar: {
+  subInfo: {
+    fontSize: 12,
+    color: '#666',
+    textAlign: 'left',
+    width: '100%',
+    marginBottom: 10,
+  },
+  botaoCriar: {
     width: '100%',
     backgroundColor: '#8A65FF',
-    borderRadius: 8,
+    borderRadius: 10,
     paddingVertical: 12,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 20,
   },
   textoBotao: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  botaoGoogle: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 15,
-    backgroundColor: '#fff',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-  },
-  textoBotaoGoogle: {
-    marginLeft: 10,
-    fontSize: 15,
-    color: '#000',
-  },
-  linkContainer: {
-    marginTop: 25,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  subTextoLogin: {
-    fontSize: 14,
-    color: '#444',
-  },
-  hyperlinkLogin: {
-    fontSize: 14,
-    color: '#8A65FF',
   },
 });
