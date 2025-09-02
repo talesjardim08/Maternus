@@ -2,65 +2,63 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, SafeAreaView, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import Home from './home';
 
-export default function Saude() {
+export default function Saude({navigation, currentUser}) {
   const [currentScreen, setCurrentScreen] = useState('HealthMain');
-
-  const HealthMain = () => (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      
-      <LinearGradient
-        colors={['#8B5CF6', '#A855F7', '#C084FC']}
-        style={styles.header}
-      >
-        <View style={styles.headerContent}>
-          <TouchableOpacity style={styles.backButton}>
-            <Ionicons name="chevron-back" size={24} color="white" />
-          </TouchableOpacity>
-          
-          <View style={styles.headerInfo}>
-            <View style={styles.iconContainer}>
-              <Ionicons name="heart" size={20} color="white" />
-            </View>
-            <Text style={styles.headerTitle}>Saúde</Text>
-          </View>
-        </View>
-        
-        <Text style={styles.subtitle}>
-          Administre a sua saúde e a do seu bebê com informações cadastradas no aplicativo
-        </Text>
-        
-        {/* Card da usuária */}
-        <TouchableOpacity 
-          style={styles.userCard}
-          onPress={() => setCurrentScreen('UserProfile')}
+  const screen = navigation
+  const HealthMain = ({navigation}) => {
+    return (
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="light-content" />
+  
+        <LinearGradient
+          colors={["#8B5CF6", "#A855F7", "#C084FC"]}
+          style={styles.fullScreen}
         >
-          <View style={styles.userIconContainer}>
-            <Ionicons name="person" size={20} color="white" />
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()} // agora volta para a tela anterior
+          >
+            <Ionicons name="chevron-back" size={28} color="white" />
+          </TouchableOpacity>
+          {/* Botão Voltar */}
+  
+          {/* Conteúdo centralizado */}
+          <View style={styles.centerContent}>
+            <View style={styles.headerInfo}>
+              <View style={styles.iconContainer}>
+                <Ionicons name="heart" size={22} color="white" />
+              </View>
+              <Text style={styles.headerTitle}>Saúde</Text>
+            </View>
+  
+            <Text style={styles.subtitle}>
+              Administre a sua saúde e a do seu bebê com informações cadastradas
+              no aplicativo
+            </Text>
+  
+            {/* Card da usuária */}
+            <TouchableOpacity
+              style={styles.userCard}
+              onPress={() => navigation.navigate("Profile", { currentUser })}
+            >
+              <View style={styles.userIconContainer}>
+                <Ionicons name="person" size={22} color="white" />
+              </View>
+              <View style={styles.userInfo}>
+                <Text style={styles.userName}>Maria da Silva (EU)</Text>
+                <Text style={styles.userRole}>Gestante</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={22} color="white" />
+            </TouchableOpacity>
           </View>
-          <View style={styles.userInfo}>
-            <Text style={styles.userName}>Maria da Silva (EU)</Text>
-            <Text style={styles.userRole}>Gestante</Text>
-          </View>
-          <Ionicons name="chevron-forward" size={20} color="white" />
-        </TouchableOpacity>
-      </LinearGradient>
-      
-      {/* Bottom Navigation */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="baby" size={24} color="#EC4899" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="home" size={24} color="#EC4899" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Ionicons name="heart" size={24} color="#EC4899" />
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
-  );
+        </LinearGradient>
+      </SafeAreaView>
+    );
+  };
+  
+  
 
   // Tela de Perfil da Usuária (Anexo 2)
   const UserProfile = () => (
@@ -75,7 +73,7 @@ export default function Saude() {
         <View style={styles.headerContent}>
           <TouchableOpacity 
             style={styles.backButton}
-            onPress={() => setCurrentScreen('HealthMain')}
+            onPress={() => navigation.navigate("Home")}
           >
             <Ionicons name="chevron-back" size={24} color="white" />
           </TouchableOpacity>
@@ -958,7 +956,7 @@ export default function Saude() {
   const renderCurrentScreen = () => {
     switch (currentScreen) {
       case 'HealthMain':
-        return <HealthMain />;
+        return <HealthMain navigation={screen}/>;
       case 'UserProfile':
         return <UserProfile />;
       case 'MythsAndTruths':
@@ -984,6 +982,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F8F9FA',
   },
+    fullScreen: {
+    flex: 1,
+    justifyContent: "center", 
+    alignItems: "center", 
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+  },
   header: {
     paddingHorizontal: 24,
     paddingTop: 16,
@@ -995,27 +1000,29 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   backButton: {
-    marginRight: 16,
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    zIndex: 1,
   },
   headerInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
+    marginBottom: 16
   },
   iconContainer: {
-    width: 40,
-    height: 40,
+    width: 42,
+    height: 42,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 20,
+    borderRadius: 21,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
   headerTitle: {
     color: 'white',
-    fontSize: 18,
-    fontWeight: '500',
-    flex: 1,
+    fontSize: 22,
+    fontWeight: '600',
   },
   userId: {
     color: 'white',
@@ -1028,40 +1035,42 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   subtitle: {
-    color: 'white',
+    color: "white",
     fontSize: 14,
     opacity: 0.9,
-    marginBottom: 32,
+    marginBottom: 24,
+    textAlign: "center",
     lineHeight: 20,
   },
   userCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 24,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
+    backgroundColor: "rgba(255, 255, 255, 0.15)",
+    borderRadius: 20,
+    padding: 18,
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
   },
   userIconContainer: {
     width: 48,
     height: 48,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: "rgba(255, 255, 255, 0.25)",
     borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: 16,
   },
   userInfo: {
     flex: 1,
   },
   userName: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   userRole: {
-    color: 'white',
+    color: "white",
     fontSize: 14,
-    opacity: 0.75,
+    opacity: 0.8,
   },
   tabContainer: {
     flexDirection: 'row',

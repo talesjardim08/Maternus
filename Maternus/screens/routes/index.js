@@ -10,13 +10,19 @@ import Saude from './screens/saude';
 import Diario from './screens/diario';
 import agenda from './screens/agenda';
 import campanha from './screens/campanha';
-import Routes from './screens/routes'
 const Stack = createNativeStackNavigator();
 
-export default function App() {
+export default function Routes() {
   return (
     <NavigationContainer>
-      <Routes/>
+      <Stack.Navigator>
+      <Stack.Screen name="Home" component={HomeScreen} options={{headerShown:false}} />
+        <Stack.Screen name="Login" component={LoginScreen} options={{headerShown:false}}/>
+        <Stack.Screen name="Cadastro" component={CadScreen} options={{headerShown:false}} />
+        <Stack.Screen name="Diario" component={Diario} />
+        <Stack.Screen name="Saude" component={Saude} />
+        <Stack.Screen name="Agenda" component={agenda} />
+        <Stack.Screen name="Campanhas" component={campanha} />
       </Stack.Navigator>
     </NavigationContainer>
   );

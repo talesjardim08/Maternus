@@ -1,17 +1,18 @@
 // Home.js
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Alert, Text } from "react-native";
 import Svg, { Path } from "react-native-svg";
+import { Ionicons } from "@expo/vector-icons";
 
-// Importando telas corretamente
+// Telas internas
 import Dashboard from "./Dashboard";
-import Appointments from "./Appointments";
-import Agenda from "./agenda";
+import Appointments from "./Appointments"; // consultas
+import Agenda from "./agenda"; // agenda geral
 import Profile from "./Profile";
 import Notifications from "./Notifications";
-import Saude from "./saude";
 import Diario from "./diario";
 import Campanhas from "./campanha";
+import Saude from "./saude";
 
 export default function Home({ navigation }) {
   const [currentScreen, setCurrentScreen] = useState("dashboard");
@@ -54,13 +55,13 @@ export default function Home({ navigation }) {
   ];
 
   const handleScreenChange = (screen) => {
-    setCurrentScreen(screen);
+    // setCurrentScreen(screen);
     setSideMenuOpen(false);
+    navigation.navigate(screen)
   };
 
   const handleUpdateProfile = (formData, avatar) => {
     setSuccessModalOpen(true);
-    // Atualização no backend pode ser implementada aqui
   };
 
   const handleExit = () => {
@@ -91,15 +92,32 @@ export default function Home({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Telas */}
-      {currentScreen === "dashboard" && <Dashboard {...sharedProps} />}
+      {/* Telas internas */}
+      {currentScreen === "dashboard" && <Dashboard {...sharedProps}/>}
       {currentScreen === "appointments" && <Appointments {...sharedProps} />}
       {currentScreen === "agenda" && <Agenda {...sharedProps} />}
       {currentScreen === "profile" && <Profile {...sharedProps} />}
       {currentScreen === "notifications" && <Notifications {...sharedProps} />}
-      {currentScreen === "saude" && <Saude {...sharedProps} />}
       {currentScreen === "diario" && <Diario {...sharedProps} />}
       {currentScreen === "campanhas" && <Campanhas {...sharedProps} />}
+      {currentScreen === "saude" && (<Saude navigation={navigation} currentUser={currentUser}/>)}
+
+      {/* Card da usuária (abre Saude via navegação) */}
+      {currentScreen === "dashboard" && (
+        <TouchableOpacity
+          style={styles.userCard}
+          onPress={() => navigation.navigate("Saude")}
+        >
+          <View style={styles.userIconContainer}>
+            <Ionicons name="person" size={20} color="white" />
+          </View>
+          <View style={styles.userInfo}>
+            <Text style={styles.userName}>Maria da Silva (EU)</Text>
+            <Text style={styles.userRole}>Gestante</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color="white" />
+        </TouchableOpacity>
+      )}
 
       {/* Bottom Navigation */}
       <View style={styles.bottomNav}>
@@ -147,6 +165,27 @@ export default function Home({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F9FAFB" },
+  userCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#8B5CF6",
+    borderRadius: 16,
+    padding: 16,
+    marginHorizontal: 16,
+    marginTop: 16,
+  },
+  userIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#A855F7",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 12,
+  },
+  userInfo: { flex: 1 },
+  userName: { color: "white", fontSize: 16, fontWeight: "600" },
+  userRole: { color: "white", fontSize: 14 },
   bottomNav: {
     position: "absolute",
     bottom: 0,

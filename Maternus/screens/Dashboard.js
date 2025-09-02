@@ -16,29 +16,28 @@ export default function Dashboard({
   navigation,
 }) {
   const modules = [
-    { label: "Saude", icon: <MaterialIcons name="local-hospital" size={36} color="white" /> },
+    { label: "Saude", icon: <MaterialIcons name="local-hospital" size={36} color="white" navigation={navigation} /> },
     { label: "Diario", icon: <FontAwesome5 name="book" size={36} color="white" /> },
     { label: "Agenda", icon: <AntDesign name="calendar" size={36} color="white" /> },
     { label: "Campanhas", icon: <MaterialIcons name="campaign" size={36} color="white" /> },
-    
-  ];
 
+  ];
   const handleModulePress = (moduleLabel) => {
-    switch (moduleLabel.toLowerCase()) {
-      case "saude":
-        handleScreenChange("saude");
+    switch (moduleLabel) {
+      case "Saude":
+        handleScreenChange("Saude");
         break;
-      case "diario":
-        handleScreenChange("diario");
+      case "Diario":
+        handleScreenChange("Diario");
         break;
-      case "agenda":
-        handleScreenChange("agenda");
+      case "Agenda":
+        handleScreenChange("Dgenda");
         break;
-      case "campanhas":
-        handleScreenChange("campanhas");
+      case "Campanhas":
+        handleScreenChange("Campanhas");
         break;
-      case "appointments":
-        handleScreenChange("appointments");
+      case "Appointments":
+        handleScreenChange("Appointments");
         break;
       default:
         console.warn("Módulo não mapeado:", moduleLabel);
