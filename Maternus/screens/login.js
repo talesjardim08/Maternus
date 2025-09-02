@@ -14,7 +14,7 @@ export default function Login({navigation}) {
 
     const verificarLogin = () =>{
         if(cpfOuCnpj === UserTeste.cpfOuCnpj && senha === UserTeste.senha){
-            //Fazer navegação com a tela home 
+            navigation.navigate('Home')
         }else{
             Alert.alert('Erro', 'Dados de Login incorretos, Tente novamente');
         }
