@@ -6,7 +6,7 @@ import { AntDesign, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 
 export default function Dashboard({
   currentUser,
-  appointments,
+  appointments = [],
   handleScreenChange,
   sideMenuOpen,
   setSideMenuOpen,
@@ -14,16 +14,22 @@ export default function Dashboard({
   setExitModalOpen,
   handleExit,
 }) {
+  // Mapeamento correto para telas
   const modules = [
-    { label: "Saúde", icon: <MaterialIcons name="local-hospital" size={36} color="white" /> },
-    { label: "Diário", icon: <FontAwesome5 name="book" size={36} color="white" /> },
-    { label: "Agenda", icon: <AntDesign name="calendar" size={36} color="white" /> },
-    { label: "Campanhas", icon: <MaterialIcons name="campaign" size={36} color="white" /> },
+    { label: "Saúde", screen: "saude", icon: <MaterialIcons name="local-hospital" size={36} color="white" /> },
+    { label: "Diário", screen: "diario", icon: <FontAwesome5 name="book" size={36} color="white" /> },
+    { label: "Agenda", screen: "agenda", icon: <AntDesign name="calendar" size={36} color="white" /> },
+    { label: "Campanhas", screen: "campanhas", icon: <MaterialIcons name="campaign" size={36} color="white" /> },
   ];
 
   return (
     <View style={styles.screen}>
-      <LinearGradient colors={["#8B5CF6", "#A855F7", "#C084FC"]} start={{x:0,y:0}} end={{x:1,y:1}} style={styles.header}>
+      <LinearGradient
+        colors={["#8B5CF6", "#A855F7", "#C084FC"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.header}
+      >
         <View style={styles.headerTop}>
           <TouchableOpacity style={styles.headerButton} onPress={() => setSideMenuOpen(true)}>
             <AntDesign name="menuunfold" size={24} color="white" />
@@ -32,13 +38,14 @@ export default function Dashboard({
             <AntDesign name="bells" size={24} color="white" />
           </TouchableOpacity>
         </View>
+
         <View style={styles.userInfo}>
           <View style={styles.avatar}>
             <AntDesign name="user" size={32} color="white" />
           </View>
           <View>
-            <Text style={styles.userName}>{currentUser?.name}</Text>
-            <Text style={styles.userRole}>{currentUser?.role}</Text>
+            <Text style={styles.userName}>{currentUser?.name || "Usuário"}</Text>
+            <Text style={styles.userRole}>{currentUser?.role || "Cargo"}</Text>
           </View>
         </View>
       </LinearGradient>
@@ -50,13 +57,8 @@ export default function Dashboard({
               <TouchableOpacity
                 key={index}
                 activeOpacity={0.8}
-                onPress={() => {
-                  if (item.label === "Saúde") handleScreenChange("saude");
-                  else if (item.label === "Diário") handleScreenChange("diario");
-                  else if (item.label === "Agenda") handleScreenChange("agenda");
-                  else if (item.label === "Campanhas") handleScreenChange("campanhas");
-                }}
-                style={styles.moduleWrapper} // envoltório para espaçamento
+                onPress={() => handleScreenChange(item.screen)}
+                style={styles.moduleWrapper}
               >
                 <LinearGradient
                   colors={["#8B5CF6", "#A855F7"]}
@@ -66,8 +68,6 @@ export default function Dashboard({
                 >
                   <View style={styles.moduleIcon}>{item.icon}</View>
                   <Text style={styles.moduleText}>{item.label}</Text>
-                  {/* Placeholder */}
-                  <Text style={{color:"white", marginTop:8}}>Conteúdo do card</Text>
                 </LinearGradient>
               </TouchableOpacity>
             ))}
@@ -82,15 +82,23 @@ export default function Dashboard({
             Estes são os seus atendimentos com a data mais próxima. Para visualizar todos entre na sua{" "}
             <Text style={styles.linkText}>agenda</Text>.
           </Text>
-          {appointments.slice(0,2).map((appointment) => (
+          {appointments.slice(0, 2).map((appointment) => (
             <View key={appointment.id} style={styles.appointmentCard}>
               <View style={styles.appointmentDate}>
                 <Text style={styles.appointmentDateText}>{appointment.date}</Text>
               </View>
-              <Text style={styles.appointmentDetail}><Text style={styles.appointmentLabel}>Atendimento:</Text> {appointment.type}</Text>
-              <Text style={styles.appointmentDetail}><Text style={styles.appointmentLabel}>Especialidade:</Text> {appointment.specialty}</Text>
-              <Text style={styles.appointmentDetail}><Text style={styles.appointmentLabel}>Horário:</Text> {appointment.time}</Text>
-              <Text style={styles.appointmentDetail}><Text style={styles.appointmentLabel}>Local:</Text> {appointment.location}</Text>
+              <Text style={styles.appointmentDetail}>
+                <Text style={styles.appointmentLabel}>Atendimento:</Text> {appointment.type}
+              </Text>
+              <Text style={styles.appointmentDetail}>
+                <Text style={styles.appointmentLabel}>Especialidade:</Text> {appointment.specialty}
+              </Text>
+              <Text style={styles.appointmentDetail}>
+                <Text style={styles.appointmentLabel}>Horário:</Text> {appointment.time}
+              </Text>
+              <Text style={styles.appointmentDetail}>
+                <Text style={styles.appointmentLabel}>Local:</Text> {appointment.location}
+              </Text>
             </View>
           ))}
         </View>
@@ -105,8 +113,8 @@ export default function Dashboard({
                 <AntDesign name="user" size={24} color="white" />
               </View>
               <View>
-                <Text style={styles.sideMenuName}>{currentUser?.name}</Text>
-                <Text style={styles.sideMenuRole}>{currentUser?.role}</Text>
+                <Text style={styles.sideMenuName}>{currentUser?.name || "Usuário"}</Text>
+                <Text style={styles.sideMenuRole}>{currentUser?.role || "Cargo"}</Text>
               </View>
             </LinearGradient>
             <View style={styles.sideMenuContent}>
@@ -160,8 +168,8 @@ const styles = StyleSheet.create({
   content:{ flex:1 },
   modulesContainer:{ paddingHorizontal:24, marginTop:24, marginBottom:32 },
   moduleGrid:{ flexDirection:"row", flexWrap:"wrap", justifyContent:"space-between" },
-  moduleWrapper:{ width:"48%" }, // garante espaçamento lateral
-  moduleCard:{ borderRadius:20, paddingVertical:32, alignItems:"center", marginBottom:16 },
+  moduleWrapper:{ width:"48%", marginBottom:16 },
+  moduleCard:{ borderRadius:20, paddingVertical:32, alignItems:"center", minHeight:120 },
   moduleIcon:{ marginBottom:12 },
   moduleText:{ color:"white", fontSize:18, fontWeight:"600", textAlign:"center" },
 
