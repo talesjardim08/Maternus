@@ -1,3 +1,4 @@
+// Profile.js
 import React, { useState } from "react";
 import {
   View,
@@ -22,17 +23,14 @@ export default function Profile({
   const [showPassword, setShowPassword] = useState(false);
   const [avatar, setAvatar] = useState(null);
   const [formData, setFormData] = useState({
-    nomeCompleto: currentUser?.name || "Maria Ferreira da Silva",
-    email: currentUser?.email || "mariadasilva@gmail.com",
-    cpf: currentUser?.cpf || "123.456.789-00",
+    nomeCompleto: currentUser?.name || "",
+    email: currentUser?.email || "",
+    cpf: currentUser?.cpf || "",
     senha: "12345678",
   });
 
   const handleInputChange = (field, value) => {
-    setFormData({
-      ...formData,
-      [field]: value,
-    });
+    setFormData({ ...formData, [field]: value });
   };
 
   const handleSubmit = () => {
@@ -42,7 +40,7 @@ export default function Profile({
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (permissionResult.granted === false) return;
+    if (!permissionResult.granted) return;
 
     const pickerResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -54,7 +52,7 @@ export default function Profile({
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={{ paddingBottom: 40 }}>
-      {/* Header */}
+      {/* HEADER */}
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.headerButton}
@@ -73,7 +71,7 @@ export default function Profile({
         </TouchableOpacity>
       </View>
 
-      {/* Avatar */}
+      {/* AVATAR */}
       <View style={styles.avatarContainer}>
         <TouchableOpacity onPress={pickImage}>
           {avatar ? (
@@ -95,15 +93,14 @@ export default function Profile({
         <Text style={{ color: "#6B7280", marginTop: 8 }}>Toque para trocar a foto</Text>
       </View>
 
-      {/* Profile Info */}
+      {/* INFORMAÇÕES */}
       <View style={styles.profileInfo}>
         <Text style={styles.profileName}>{currentUser?.name}</Text>
         <Text style={styles.profileRole}>Mamãe</Text>
       </View>
 
-      {/* Form */}
+      {/* FORMULÁRIO */}
       <View style={styles.formContainer}>
-        {/* Nome */}
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>Nome Completo</Text>
           <TextInput
@@ -114,7 +111,6 @@ export default function Profile({
           />
         </View>
 
-        {/* Email */}
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>E-mail / Telefone</Text>
           <TextInput
@@ -125,7 +121,6 @@ export default function Profile({
           />
         </View>
 
-        {/* CPF */}
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>CPF</Text>
           <TextInput
@@ -135,7 +130,6 @@ export default function Profile({
           />
         </View>
 
-        {/* Senha */}
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>Senha</Text>
           <View style={styles.passwordContainer}>
@@ -183,13 +177,11 @@ export default function Profile({
         </View>
 
         <TouchableOpacity style={styles.updateButton} onPress={handleSubmit}>
-          <Text style={{ color: "white", fontSize: 18, fontWeight: "500" }}>
-            Editar meus dados
-          </Text>
+          <Text style={{ color: "white", fontSize: 18, fontWeight: "500" }}>Editar meus dados</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Modal de Sucesso */}
+      {/* MODAL DE SUCESSO */}
       <Modal visible={successModalOpen} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.successModal}>
@@ -221,132 +213,26 @@ export default function Profile({
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: "#F3E8FF",
-  },
-  header: {
-    paddingTop: 48,
-    paddingBottom: 24,
-    paddingHorizontal: 24,
-  },
-  headerButton: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  backText: {
-    color: "#8B5CF6",
-    fontSize: 16,
-    fontWeight: "500",
-    marginLeft: 8,
-  },
-  avatarContainer: {
-    alignItems: "center",
-    marginBottom: 24,
-  },
-  avatar: {
-    width: 80,
-    height: 80,
-    backgroundColor: "rgba(139, 92, 246, 0.1)",
-    borderRadius: 40,
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 2,
-    borderColor: "#8B5CF6",
-  },
-  profileInfo: {
-    alignItems: "center",
-    marginBottom: 32,
-  },
-  profileName: {
-    fontSize: 20,
-    fontWeight: "500",
-    color: "#8B5CF6",
-    marginBottom: 4,
-  },
-  profileRole: {
-    fontSize: 16,
-    color: "#9CA3AF",
-  },
-  formContainer: {
-    paddingHorizontal: 24,
-  },
-  inputGroup: {
-    marginBottom: 20,
-  },
-  inputLabel: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#8B5CF6",
-    marginBottom: 8,
-  },
-  input: {
-    padding: 16,
-    fontSize: 16,
-    color: "#1F2937",
-    borderRadius: 12,
-    backgroundColor: "white",
-    elevation: 2,
-  },
-  passwordContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "white",
-    borderRadius: 12,
-    elevation: 2,
-  },
-  passwordInput: {
-    flex: 1,
-    padding: 16,
-    fontSize: 16,
-    color: "#1F2937",
-  },
-  eyeButton: {
-    padding: 16,
-  },
-  updateButton: {
-    backgroundColor: "#8B5CF6",
-    padding: 16,
-    borderRadius: 16,
-    alignItems: "center",
-    marginTop: 20,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 16,
-  },
-  successModal: {
-    backgroundColor: "white",
-    borderRadius: 16,
-    padding: 24,
-    alignItems: "center",
-    width: "100%",
-    maxWidth: 400,
-  },
-  successIconContainer: {
-    width: 64,
-    height: 64,
-    backgroundColor: "#D1FAE5",
-    borderRadius: 32,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 16,
-  },
-  successModalTitle: {
-    fontSize: 18,
-    fontWeight: "500",
-    color: "#1F2937",
-    textAlign: "center",
-    marginBottom: 16,
-  },
-  okButton: {
-    backgroundColor: "#10B981",
-    borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    marginTop: 8,
-  },
+  screen: { flex: 1, backgroundColor: "#F3E8FF" },
+  header: { paddingTop: 48, paddingBottom: 24, paddingHorizontal: 24 },
+  headerButton: { flexDirection: "row", alignItems: "center" },
+  backText: { color: "#8B5CF6", fontSize: 16, fontWeight: "500", marginLeft: 8 },
+  avatarContainer: { alignItems: "center", marginBottom: 24 },
+  avatar: { width: 80, height: 80, backgroundColor: "rgba(139,92,246,0.1)", borderRadius: 40, alignItems: "center", justifyContent: "center", borderWidth: 2, borderColor: "#8B5CF6" },
+  profileInfo: { alignItems: "center", marginBottom: 32 },
+  profileName: { fontSize: 20, fontWeight: "500", color: "#8B5CF6", marginBottom: 4 },
+  profileRole: { fontSize: 16, color: "#9CA3AF" },
+  formContainer: { paddingHorizontal: 24 },
+  inputGroup: { marginBottom: 20 },
+  inputLabel: { fontSize: 14, fontWeight: "500", color: "#8B5CF6", marginBottom: 8 },
+  input: { padding: 16, fontSize: 16, color: "#1F2937", borderRadius: 12, backgroundColor: "white", elevation: 2 },
+  passwordContainer: { flexDirection: "row", alignItems: "center", backgroundColor: "white", borderRadius: 12, elevation: 2 },
+  passwordInput: { flex: 1, padding: 16, fontSize: 16, color: "#1F2937" },
+  eyeButton: { padding: 16 },
+  updateButton: { backgroundColor: "#8B5CF6", padding: 16, borderRadius: 16, alignItems: "center", marginTop: 20 },
+  modalOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center", padding: 16 },
+  successModal: { backgroundColor: "white", borderRadius: 16, padding: 24, alignItems: "center", width: "100%", maxWidth: 400 },
+  successIconContainer: { width: 64, height: 64, backgroundColor: "#D1FAE5", borderRadius: 32, alignItems: "center", justifyContent: "center", marginBottom: 16 },
+  successModalTitle: { fontSize: 18, fontWeight: "500", color: "#1F2937", textAlign: "center", marginBottom: 16 },
+  okButton: { backgroundColor: "#10B981", borderRadius: 12, paddingVertical: 12, paddingHorizontal: 24, marginTop: 8 },
 });

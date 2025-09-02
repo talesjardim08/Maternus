@@ -1,13 +1,19 @@
+// Home.js
 import React, { useState } from "react";
-import { View, Alert, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
+// Importando telas corretamente
 import Dashboard from "./Dashboard";
 import Appointments from "./Appointments";
+import Agenda from "./agenda";
 import Profile from "./Profile";
 import Notifications from "./Notifications";
+import Saude from "./saude";
+import Diario from "./diario";
+import Campanhas from "./campanha";
 
-export default function Home({ navigation }) { // <-- receber navigation do stack
+export default function Home({ navigation }) {
   const [currentScreen, setCurrentScreen] = useState("dashboard");
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
   const [exitModalOpen, setExitModalOpen] = useState(false);
@@ -17,6 +23,8 @@ export default function Home({ navigation }) { // <-- receber navigation do stac
     id: "1",
     name: "Maria da Silva",
     role: "Gestante",
+    email: "mariadasilva@gmail.com",
+    cpf: "123.456.789-00",
     password: "18765432I",
   };
 
@@ -39,19 +47,20 @@ export default function Home({ navigation }) { // <-- receber navigation do stac
     },
   ];
 
-  const [notifications, setNotifications] = useState([
+  const notifications = [
     { id: "1", title: "Consulta agendada", message: "Sua consulta foi agendada para amanhã às 14h", time: "2h atrás" },
     { id: "2", title: "Lembrete de medicação", message: "Não esqueça de tomar seu ácido fólico", time: "4h atrás" },
     { id: "3", title: "Dica de saúde", message: "Beba bastante água durante a gravidez", time: "1 dia atrás" },
-  ]);
+  ];
 
   const handleScreenChange = (screen) => {
     setCurrentScreen(screen);
     setSideMenuOpen(false);
   };
 
-  const handleUpdateProfile = () => {
+  const handleUpdateProfile = (formData, avatar) => {
     setSuccessModalOpen(true);
+    // Atualização no backend pode ser implementada aqui
   };
 
   const handleExit = () => {
@@ -60,7 +69,7 @@ export default function Home({ navigation }) { // <-- receber navigation do stac
   };
 
   const removeNotification = (id) => {
-    setNotifications(notifications.filter((notif) => notif.id !== id));
+    // Atualize o estado se precisar
   };
 
   const sharedProps = {
@@ -77,22 +86,33 @@ export default function Home({ navigation }) { // <-- receber navigation do stac
     setExitModalOpen,
     successModalOpen,
     setSuccessModalOpen,
-    navigation, // <-- passa navigation pro Dashboard
+    navigation,
   };
 
   return (
     <View style={styles.container}>
+      {/* Telas */}
       {currentScreen === "dashboard" && <Dashboard {...sharedProps} />}
       {currentScreen === "appointments" && <Appointments {...sharedProps} />}
+      {currentScreen === "agenda" && <Agenda {...sharedProps} />}
       {currentScreen === "profile" && <Profile {...sharedProps} />}
       {currentScreen === "notifications" && <Notifications {...sharedProps} />}
+      {currentScreen === "saude" && <Saude {...sharedProps} />}
+      {currentScreen === "diario" && <Diario {...sharedProps} />}
+      {currentScreen === "campanhas" && <Campanhas {...sharedProps} />}
 
       {/* Bottom Navigation */}
       <View style={styles.bottomNav}>
         <View style={styles.navContainer}>
-          <TouchableOpacity style={styles.navButton}>
+          <TouchableOpacity
+            style={styles.navButton}
+            onPress={() => handleScreenChange("notifications")}
+          >
             <Svg width="24" height="24" viewBox="0 0 24 24">
-              <Path fill="#EC4899" d="M12 2C10.1 2 8.5 3.6 8.5 5.5S10.1 9 12 9s3.5-1.6 3.5-3.5S13.9 2 12 2zM21 9v2h-4.5c-1.1 0-2 .9-2 2s.9 2 2 2H21v2h-4.5c-2.2 0-4-1.8-4-4s1.8-4 4-4H21zM3 15h4.5c2.2 0 4 1.8 4 4s-1.8 4-4 4H3v-2h4.5c1.1 0 2-.9 2-2s-.9-2-2-2H3v-2z" />
+              <Path
+                fill={currentScreen === "notifications" ? "#3B82F6" : "#9CA3AF"}
+                d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 002 2zm6-6V11c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 00-3 0v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"
+              />
             </Svg>
           </TouchableOpacity>
 
@@ -101,13 +121,22 @@ export default function Home({ navigation }) { // <-- receber navigation do stac
             onPress={() => handleScreenChange("dashboard")}
           >
             <Svg width="24" height="24" viewBox="0 0 24 24">
-              <Path fill="#3B82F6" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+              <Path
+                fill={currentScreen === "dashboard" ? "#3B82F6" : "#9CA3AF"}
+                d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"
+              />
             </Svg>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.navButton}>
+          <TouchableOpacity
+            style={styles.navButton}
+            onPress={() => handleScreenChange("profile")}
+          >
             <Svg width="24" height="24" viewBox="0 0 24 24">
-              <Path fill="#EC4899" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              <Path
+                fill={currentScreen === "profile" ? "#3B82F6" : "#9CA3AF"}
+                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+              />
             </Svg>
           </TouchableOpacity>
         </View>
@@ -117,8 +146,21 @@ export default function Home({ navigation }) { // <-- receber navigation do stac
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#F9FAFB", paddingBottom: 80 },
-  bottomNav: { position: "absolute", bottom: 0, left: 0, right: 0, backgroundColor: "#fff", borderTopWidth: 1, borderTopColor: "#E5E7EB", paddingVertical: 16 },
-  navContainer: { flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 48 },
+  container: { flex: 1, backgroundColor: "#F9FAFB" },
+  bottomNav: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#fff",
+    borderTopWidth: 1,
+    borderTopColor: "#E5E7EB",
+    paddingVertical: 12,
+  },
+  navContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
   navButton: { padding: 8 },
 });

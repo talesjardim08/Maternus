@@ -2,7 +2,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Modal } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { AntDesign, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
+import { AntDesign, MaterialIcons, FontAwesome5, FontAwesome } from "@expo/vector-icons";
 
 export default function Dashboard({
   currentUser,
@@ -12,17 +12,37 @@ export default function Dashboard({
   exitModalOpen,
   setExitModalOpen,
   handleExit,
-  navigation, // recebendo navigation do Home.js
+  handleScreenChange,
+  navigation,
 }) {
   const modules = [
     { label: "Saude", icon: <MaterialIcons name="local-hospital" size={36} color="white" /> },
     { label: "Diario", icon: <FontAwesome5 name="book" size={36} color="white" /> },
     { label: "Agenda", icon: <AntDesign name="calendar" size={36} color="white" /> },
     { label: "Campanhas", icon: <MaterialIcons name="campaign" size={36} color="white" /> },
+    
   ];
 
-  const handleModulePress = (module) => {
-    navigation.navigate(module); // navega para a tela correspondente
+  const handleModulePress = (moduleLabel) => {
+    switch (moduleLabel.toLowerCase()) {
+      case "saude":
+        handleScreenChange("saude");
+        break;
+      case "diario":
+        handleScreenChange("diario");
+        break;
+      case "agenda":
+        handleScreenChange("agenda");
+        break;
+      case "campanhas":
+        handleScreenChange("campanhas");
+        break;
+      case "appointments":
+        handleScreenChange("appointments");
+        break;
+      default:
+        console.warn("Módulo não mapeado:", moduleLabel);
+    }
   };
 
   return (
@@ -40,7 +60,7 @@ export default function Dashboard({
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.headerButton}
-            onPress={() => navigation.navigate("Notifications")}
+            onPress={() => handleScreenChange("notifications")}
           >
             <AntDesign name="bells" size={24} color="white" />
           </TouchableOpacity>
@@ -86,7 +106,7 @@ export default function Dashboard({
         <View style={styles.appointmentsSection}>
           <TouchableOpacity
             style={styles.appointmentsButton}
-            onPress={() => navigation.navigate("Appointments")}
+            onPress={() => handleScreenChange("appointments")}
           >
             <Text style={styles.appointmentsButtonText}>Próximos atendimentos</Text>
           </TouchableOpacity>
@@ -134,10 +154,10 @@ export default function Dashboard({
               </View>
             </LinearGradient>
             <View style={styles.sideMenuContent}>
-              <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Home")}>
+              <TouchableOpacity style={styles.menuItem} onPress={() => handleScreenChange("dashboard")}>
                 <Text style={styles.menuItemText}>Início</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Profile")}>
+              <TouchableOpacity style={styles.menuItem} onPress={() => handleScreenChange("profile")}>
                 <Text style={styles.menuItemText}>Editar meus dados pessoais</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.menuItem} onPress={() => setExitModalOpen(true)}>
@@ -172,7 +192,6 @@ export default function Dashboard({
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#F9FAFB" },
-
   header: { paddingTop: 48, paddingBottom: 32, paddingHorizontal: 24 },
   headerTop: { flexDirection: "row", justifyContent: "space-between", marginBottom: 32 },
   headerButton: { padding: 8 },
@@ -192,7 +211,17 @@ const styles = StyleSheet.create({
   modulesContainer: { paddingHorizontal: 24, marginTop: 24, marginBottom: 32 },
   moduleGrid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" },
   moduleWrapper: { width: "48%", marginBottom: 16 },
-  moduleCard: { borderRadius: 20, paddingVertical: 32, alignItems: "center", minHeight: 120 },
+  moduleCard: {
+    borderRadius: 20,
+    paddingVertical: 32,
+    alignItems: "center",
+    minHeight: 120,
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 12,
+    elevation: 6,
+  },
   moduleIcon: { marginBottom: 12 },
   moduleText: { color: "white", fontSize: 18, fontWeight: "600", textAlign: "center" },
 
