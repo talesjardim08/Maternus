@@ -7,23 +7,27 @@ import { AntDesign, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 export default function Dashboard({
   currentUser,
   appointments = [],
-  handleScreenChange,
   sideMenuOpen,
   setSideMenuOpen,
   exitModalOpen,
   setExitModalOpen,
   handleExit,
+  navigation, // recebendo navigation do Home.js
 }) {
-  // Mapeamento correto para telas
   const modules = [
-    { label: "Saúde", screen: "saude", icon: <MaterialIcons name="local-hospital" size={36} color="white" /> },
-    { label: "Diário", screen: "diario", icon: <FontAwesome5 name="book" size={36} color="white" /> },
-    { label: "Agenda", screen: "agenda", icon: <AntDesign name="calendar" size={36} color="white" /> },
-    { label: "Campanhas", screen: "campanhas", icon: <MaterialIcons name="campaign" size={36} color="white" /> },
+    { label: "Saude", icon: <MaterialIcons name="local-hospital" size={36} color="white" /> },
+    { label: "Diario", icon: <FontAwesome5 name="book" size={36} color="white" /> },
+    { label: "Agenda", icon: <AntDesign name="calendar" size={36} color="white" /> },
+    { label: "Campanhas", icon: <MaterialIcons name="campaign" size={36} color="white" /> },
   ];
+
+  const handleModulePress = (module) => {
+    navigation.navigate(module); // navega para a tela correspondente
+  };
 
   return (
     <View style={styles.screen}>
+      {/* HEADER */}
       <LinearGradient
         colors={["#8B5CF6", "#A855F7", "#C084FC"]}
         start={{ x: 0, y: 0 }}
@@ -34,11 +38,13 @@ export default function Dashboard({
           <TouchableOpacity style={styles.headerButton} onPress={() => setSideMenuOpen(true)}>
             <AntDesign name="menuunfold" size={24} color="white" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.headerButton} onPress={() => handleScreenChange("notifications")}>
+          <TouchableOpacity
+            style={styles.headerButton}
+            onPress={() => navigation.navigate("Notifications")}
+          >
             <AntDesign name="bells" size={24} color="white" />
           </TouchableOpacity>
         </View>
-
         <View style={styles.userInfo}>
           <View style={styles.avatar}>
             <AntDesign name="user" size={32} color="white" />
@@ -50,14 +56,16 @@ export default function Dashboard({
         </View>
       </LinearGradient>
 
+      {/* CONTEÚDO */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        {/* MÓDULOS */}
         <View style={styles.modulesContainer}>
           <View style={styles.moduleGrid}>
             {modules.map((item, index) => (
               <TouchableOpacity
                 key={index}
                 activeOpacity={0.8}
-                onPress={() => handleScreenChange(item.screen)}
+                onPress={() => handleModulePress(item.label)}
                 style={styles.moduleWrapper}
               >
                 <LinearGradient
@@ -74,8 +82,12 @@ export default function Dashboard({
           </View>
         </View>
 
+        {/* ATENDIMENTOS */}
         <View style={styles.appointmentsSection}>
-          <TouchableOpacity style={styles.appointmentsButton} onPress={() => handleScreenChange("appointments")}>
+          <TouchableOpacity
+            style={styles.appointmentsButton}
+            onPress={() => navigation.navigate("Appointments")}
+          >
             <Text style={styles.appointmentsButtonText}>Próximos atendimentos</Text>
           </TouchableOpacity>
           <Text style={styles.appointmentsDescription}>
@@ -106,9 +118,13 @@ export default function Dashboard({
 
       {/* SIDE MENU */}
       <Modal visible={sideMenuOpen} transparent animationType="slide">
-        <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={() => setSideMenuOpen(false)}>
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setSideMenuOpen(false)}
+        >
           <View style={styles.sideMenu}>
-            <LinearGradient colors={["#8B5CF6","#A855F7","#C084FC"]} style={styles.sideMenuHeader}>
+            <LinearGradient colors={["#8B5CF6", "#A855F7", "#C084FC"]} style={styles.sideMenuHeader}>
               <View style={styles.sideMenuAvatar}>
                 <AntDesign name="user" size={24} color="white" />
               </View>
@@ -118,10 +134,10 @@ export default function Dashboard({
               </View>
             </LinearGradient>
             <View style={styles.sideMenuContent}>
-              <TouchableOpacity style={styles.menuItem} onPress={() => handleScreenChange("dashboard")}>
+              <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Home")}>
                 <Text style={styles.menuItemText}>Início</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem} onPress={() => handleScreenChange("profile")}>
+              <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Profile")}>
                 <Text style={styles.menuItemText}>Editar meus dados pessoais</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.menuItem} onPress={() => setExitModalOpen(true)}>
@@ -155,50 +171,101 @@ export default function Dashboard({
 }
 
 const styles = StyleSheet.create({
-  screen: { flex:1, backgroundColor:"#F9FAFB" },
+  screen: { flex: 1, backgroundColor: "#F9FAFB" },
 
-  header: { paddingTop:48, paddingBottom:32, paddingHorizontal:24 },
-  headerTop:{ flexDirection:"row", justifyContent:"space-between", marginBottom:32 },
-  headerButton:{ padding:8 },
-  userInfo:{ flexDirection:"row", alignItems:"center", gap:16 },
-  avatar:{ width:64, height:64, borderRadius:32, backgroundColor:"rgba(255,255,255,0.2)", justifyContent:"center", alignItems:"center" },
-  userName:{ fontSize:24, fontWeight:"500", color:"white" },
-  userRole:{ fontSize:18, color:"rgba(255,255,255,0.9)" },
+  header: { paddingTop: 48, paddingBottom: 32, paddingHorizontal: 24 },
+  headerTop: { flexDirection: "row", justifyContent: "space-between", marginBottom: 32 },
+  headerButton: { padding: 8 },
+  userInfo: { flexDirection: "row", alignItems: "center", gap: 16 },
+  avatar: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: "rgba(255,255,255,0.2)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  userName: { fontSize: 24, fontWeight: "500", color: "white" },
+  userRole: { fontSize: 18, color: "rgba(255,255,255,0.9)" },
 
-  content:{ flex:1 },
-  modulesContainer:{ paddingHorizontal:24, marginTop:24, marginBottom:32 },
-  moduleGrid:{ flexDirection:"row", flexWrap:"wrap", justifyContent:"space-between" },
-  moduleWrapper:{ width:"48%", marginBottom:16 },
-  moduleCard:{ borderRadius:20, paddingVertical:32, alignItems:"center", minHeight:120 },
-  moduleIcon:{ marginBottom:12 },
-  moduleText:{ color:"white", fontSize:18, fontWeight:"600", textAlign:"center" },
+  content: { flex: 1 },
+  modulesContainer: { paddingHorizontal: 24, marginTop: 24, marginBottom: 32 },
+  moduleGrid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" },
+  moduleWrapper: { width: "48%", marginBottom: 16 },
+  moduleCard: { borderRadius: 20, paddingVertical: 32, alignItems: "center", minHeight: 120 },
+  moduleIcon: { marginBottom: 12 },
+  moduleText: { color: "white", fontSize: 18, fontWeight: "600", textAlign: "center" },
 
-  appointmentsSection:{ paddingHorizontal:24, marginBottom:24 },
-  appointmentsButton:{ borderRadius:16, padding:16, backgroundColor:"#8B5CF6", alignItems:"center", marginBottom:16 },
-  appointmentsButtonText:{ color:"white", fontSize:18, fontWeight:"500" },
-  appointmentsDescription:{ fontSize:14, color:"#6B7280", marginBottom:16 },
-  linkText:{ color:"#8B5CF6", fontWeight:"500" },
-  appointmentCard:{ backgroundColor:"white", borderRadius:20, padding:20, marginBottom:16, shadowColor:"#000", shadowOpacity:0.1, shadowOffset:{width:0,height:3}, shadowRadius:10, elevation:4 },
-  appointmentDate:{ backgroundColor:"#8B5CF6", borderRadius:24, paddingVertical:6, paddingHorizontal:12, alignSelf:"flex-start", marginBottom:8 },
-  appointmentDateText:{ color:"white", fontWeight:"700" },
-  appointmentDetail:{ fontSize:15, color:"#374151", marginBottom:4 },
-  appointmentLabel:{ fontWeight:"700" },
+  appointmentsSection: { paddingHorizontal: 24, marginBottom: 24 },
+  appointmentsButton: {
+    borderRadius: 16,
+    padding: 16,
+    backgroundColor: "#8B5CF6",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  appointmentsButtonText: { color: "white", fontSize: 18, fontWeight: "500" },
+  appointmentsDescription: { fontSize: 14, color: "#6B7280", marginBottom: 16 },
+  linkText: { color: "#8B5CF6", fontWeight: "500" },
+  appointmentCard: {
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 10,
+    elevation: 4,
+  },
+  appointmentDate: {
+    backgroundColor: "#8B5CF6",
+    borderRadius: 24,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    alignSelf: "flex-start",
+    marginBottom: 8,
+  },
+  appointmentDateText: { color: "white", fontWeight: "700" },
+  appointmentDetail: { fontSize: 15, color: "#374151", marginBottom: 4 },
+  appointmentLabel: { fontWeight: "700" },
 
-  modalOverlay:{ flex:1, backgroundColor:"rgba(0,0,0,0.5)" },
-  sideMenu:{ width:280, backgroundColor:"white", height:"100%" },
-  sideMenuHeader:{ padding:24, flexDirection:"row", alignItems:"center" },
-  sideMenuAvatar:{ width:48, height:48, borderRadius:24, backgroundColor:"rgba(255,255,255,0.2)", justifyContent:"center", alignItems:"center", marginRight:12 },
-  sideMenuName:{ fontSize:18, fontWeight:"600", color:"white" },
-  sideMenuRole:{ fontSize:14, color:"rgba(255,255,255,0.9)" },
-  sideMenuContent:{ padding:16 },
-  menuItem:{ paddingVertical:12 },
-  menuItemText:{ fontSize:16, color:"#374151" },
+  modalOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)" },
+  sideMenu: { width: 280, backgroundColor: "white", height: "100%" },
+  sideMenuHeader: { padding: 24, flexDirection: "row", alignItems: "center" },
+  sideMenuAvatar: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: "rgba(255,255,255,0.2)",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 12,
+  },
+  sideMenuName: { fontSize: 18, fontWeight: "600", color: "white" },
+  sideMenuRole: { fontSize: 14, color: "rgba(255,255,255,0.9)" },
+  sideMenuContent: { padding: 16 },
+  menuItem: { paddingVertical: 12 },
+  menuItemText: { fontSize: 16, color: "#374151" },
 
-  exitModal:{ backgroundColor:"white", borderRadius:16, padding:24, marginHorizontal:32 },
-  exitModalTitle:{ fontSize:18, fontWeight:"500", textAlign:"center", marginBottom:16 },
-  exitModalButtons:{ flexDirection:"row", gap:12 },
-  confirmButton:{ flex:1, backgroundColor:"#8B5CF6", padding:12, borderRadius:12, alignItems:"center" },
-  confirmButtonText:{ color:"white", fontWeight:"500" },
-  cancelButton:{ flex:1, borderColor:"#D1D5DB", borderWidth:1, padding:12, borderRadius:12, alignItems:"center" },
-  cancelButtonText:{ color:"#374151", fontWeight:"500" },
+  exitModal: { backgroundColor: "white", borderRadius: 16, padding: 24, marginHorizontal: 32 },
+  exitModalTitle: { fontSize: 18, fontWeight: "500", textAlign: "center", marginBottom: 16 },
+  exitModalButtons: { flexDirection: "row", gap: 12 },
+  confirmButton: {
+    flex: 1,
+    backgroundColor: "#8B5CF6",
+    padding: 12,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  confirmButtonText: { color: "white", fontWeight: "500" },
+  cancelButton: {
+    flex: 1,
+    borderColor: "#D1D5DB",
+    borderWidth: 1,
+    padding: 12,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  cancelButtonText: { color: "#374151", fontWeight: "500" },
 });
