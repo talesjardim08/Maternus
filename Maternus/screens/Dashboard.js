@@ -2,7 +2,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Modal } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { AntDesign, MaterialIcons, FontAwesome5, FontAwesome } from "@expo/vector-icons";
+import { AntDesign, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 
 export default function Dashboard({
   currentUser,
@@ -16,28 +16,30 @@ export default function Dashboard({
   navigation,
 }) {
   const modules = [
-    { label: "Saude", icon: <MaterialIcons name="local-hospital" size={36} color="white" navigation={navigation} /> },
+    { label: "Saude", icon: <MaterialIcons name="local-hospital" size={36} color="white" /> },
     { label: "Diario", icon: <FontAwesome5 name="book" size={36} color="white" /> },
     { label: "Agenda", icon: <AntDesign name="calendar" size={36} color="white" /> },
     { label: "Campanhas", icon: <MaterialIcons name="campaign" size={36} color="white" /> },
-
   ];
+
   const handleModulePress = (moduleLabel) => {
-    switch (moduleLabel) {
-      case "Saude":
-        handleScreenChange("Saude");
+    const key = String(moduleLabel).toLowerCase();
+    switch (key) {
+      case "saude":
+        handleScreenChange("saude");
         break;
-      case "Diario":
-        handleScreenChange("Diario");
+      case "diario":
+        handleScreenChange("diario");
         break;
-      case "Agenda":
-        handleScreenChange("Dgenda");
+      case "agenda":
+        handleScreenChange("agenda");
         break;
-      case "Campanhas":
-        handleScreenChange("Campanhas");
+      case "campanhas":
+        handleScreenChange("campanhas");
         break;
-      case "Appointments":
-        handleScreenChange("Appointments");
+      case "appointments":
+      case "atendimentos":
+        handleScreenChange("appointments");
         break;
       default:
         console.warn("Módulo não mapeado:", moduleLabel);

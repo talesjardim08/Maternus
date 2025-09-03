@@ -7,108 +7,99 @@ import Home from './home';
 export default function Saude({navigation, currentUser}) {
   const [currentScreen, setCurrentScreen] = useState('HealthMain');
   const screen = navigation
-  const HealthMain = ({navigation}) => {
-    return (
-      <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="light-content" />
-  
-        <LinearGradient
-          colors={["#8B5CF6", "#A855F7", "#C084FC"]}
-          style={styles.fullScreen}
-        >
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => navigation.goBack()} // agora volta para a tela anterior
-          >
-            <Ionicons name="chevron-back" size={28} color="white" />
-          </TouchableOpacity>
-          {/* Botão Voltar */}
-  
-          {/* Conteúdo centralizado */}
-          <View style={styles.centerContent}>
-            <View style={styles.headerInfo}>
-              <View style={styles.iconContainer}>
-                <Ionicons name="heart" size={22} color="white" />
-              </View>
-              <Text style={styles.headerTitle}>Saúde</Text>
-            </View>
-  
-            <Text style={styles.subtitle}>
-              Administre a sua saúde e a do seu bebê com informações cadastradas
-              no aplicativo
-            </Text>
-  
-            {/* Card da usuária */}
-            <TouchableOpacity
-              style={styles.userCard}
-              onPress={() => navigation.navigate("Profile", { currentUser })}
-            >
-              <View style={styles.userIconContainer}>
-                <Ionicons name="person" size={22} color="white" />
-              </View>
-              <View style={styles.userInfo}>
-                <Text style={styles.userName}>Maria da Silva (EU)</Text>
-                <Text style={styles.userRole}>Gestante</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={22} color="white" />
-            </TouchableOpacity>
-          </View>
-        </LinearGradient>
-      </SafeAreaView>
-    );
-  };
-  
-  
+  const HealthMain = () => (
+  <SafeAreaView style={{ flex: 1, backgroundColor: '#F8F9FA' }}>
+    <StatusBar barStyle="light-content" />
 
-  // Tela de Perfil da Usuária (Anexo 2)
+    <LinearGradient
+      colors={["#8B5CF6", "#A855F7", "#C084FC"]}
+      style={{ flex: 1 }}
+    >
+      {/* Botão de voltar */}
+      <TouchableOpacity
+        style={{
+          position: 'absolute',
+          top: 50,
+          left: 20,
+          width: 40,
+          height: 40,
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 10,
+        }}
+      >
+        <Ionicons name="chevron-back" size={28} color="white" />
+      </TouchableOpacity>
+
+      {/* Header */}
+      <View style={{ paddingHorizontal: 24, paddingTop: 60 }}>
+        <View style={[styles.headerInfo, { marginLeft: 50 }]}>
+          <View style={styles.iconContainer}>
+            <Ionicons name="heart" size={22} color="white" />
+          </View>
+          <Text style={styles.headerTitle}>Saúde</Text>
+        </View>
+
+        <Text style={[styles.subtitle, { fontSize: 18, lineHeight: 26 }]}>
+          Administre a sua saúde e a do seu bebê com informações cadastradas no aplicativo
+        </Text>
+
+        <TouchableOpacity
+          style={[styles.userCard, { marginTop: 24 }]}
+          onPress={() => setCurrentScreen("UserProfile")}
+        >
+          <View style={styles.userIconContainer}>
+            <Ionicons name="person" size={22} color="white" />
+          </View>
+          <View style={styles.userInfo}>
+            <Text style={styles.userName}>Maria da Silva (EU)</Text>
+            <Text style={styles.userRole}>Gestante</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={22} color="white" />
+        </TouchableOpacity>
+      </View>
+    </LinearGradient>
+  </SafeAreaView>
+);
+
+
+
+  // Tela de Perfil da Usuária
   const UserProfile = () => (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
-      
-      {/* Header com info da usuária */}
       <LinearGradient
-        colors={['#8B5CF6', '#A855F7', '#C084FC']}
+        colors={["#8B5CF6", "#A855F7", "#C084FC"]}
         style={styles.header}
       >
-        <View style={styles.headerContent}>
-          <TouchableOpacity 
-            style={styles.backButton}
-            onPress={() => navigation.navigate("Home")}
-          >
-            <Ionicons name="chevron-back" size={24} color="white" />
-          </TouchableOpacity>
-          
-          <View style={styles.headerInfo}>
-            <View style={styles.iconContainer}>
-              <Ionicons name="person" size={20} color="white" />
-            </View>
-            <View>
-              <Text style={styles.userId}>123.456.789-09</Text>
-              <Text style={styles.userNameHeader}>Nome: Maria da Silva (EU)</Text>
-            </View>
+        <View style={styles.headerInfo}>
+          <View style={styles.iconContainer}>
+            <Ionicons name="person" size={20} color="white" />
+          </View>
+          <View>
+            <Text style={styles.userId}>123.456.789-09</Text>
+            <Text style={styles.userNameHeader}>Nome: Maria da Silva (EU)</Text>
           </View>
         </View>
-        
-        {/* Tabs */}
+
         <View style={styles.tabContainer}>
           <TouchableOpacity style={[styles.tab, styles.activeTab]}>
             <Text style={styles.tabText}>Saúde</Text>
           </TouchableOpacity>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.tab}
-            onPress={() => setCurrentScreen('Vaccination')}
+            onPress={() => setCurrentScreen("Vaccination")}
           >
             <Text style={styles.tabText}>Vacinação</Text>
           </TouchableOpacity>
         </View>
       </LinearGradient>
-      
-      <ScrollView 
-        style={styles.content} 
+
+      <ScrollView
+        style={styles.content}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* Barra de pesquisa */}
         <View style={styles.searchContainer}>
           <View style={styles.searchBar}>
             <TextInput
@@ -119,11 +110,11 @@ export default function Saude({navigation, currentUser}) {
             <Ionicons name="search" size={20} color="#999" />
           </View>
         </View>
-        
-        {/* Condições de saúde pré-existentes */}
+
+        {/* Condições de saúde */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Condições de saúde pré-existentes:</Text>
-          
+
           <View style={styles.conditionCard}>
             <Text style={styles.conditionTitle}>Diabetes Gestacional</Text>
             <Text style={styles.conditionSubtitle}>Descrição / Observações clínicas</Text>
@@ -131,56 +122,60 @@ export default function Saude({navigation, currentUser}) {
               Diagnosticado no segundo trimestre. Monitorar glicemia diariamente.
             </Text>
             <Text style={styles.conditionInfo}>
-              <Text style={styles.conditionLabel}>Grau de risco / Classificação de gravidade (se aplicável):</Text>
-              {'\n'}Moderado
+              <Text style={styles.conditionLabel}>
+                Grau de risco / Classificação de gravidade (se aplicável):
+              </Text>
+              {"\n"}Moderado
             </Text>
             <Text style={styles.conditionInfo}>
-              <Text style={styles.conditionLabel}>Data da última atualização dessa informação:</Text>
-              {'\n'}05/08/2025
+              <Text style={styles.conditionLabel}>
+                Data da última atualização dessa informação:
+              </Text>
+              {"\n"}05/08/2025
             </Text>
           </View>
         </View>
-        
+
         {/* Restrições e indicações */}
         <View style={styles.section}>
           <Text style={styles.sectionMainTitle}>
             Saiba as principais restrições e indicações durante a gestação
           </Text>
-          
+
           <View style={styles.categoryGrid}>
-            <TouchableOpacity 
-              style={[styles.categoryCard, { backgroundColor: '#10B981' }]}
-              onPress={() => setCurrentScreen('MythsAndTruths')}
+            <TouchableOpacity
+              style={[styles.categoryCard, { backgroundColor: "#10B981" }]}
+              onPress={() => setCurrentScreen("MythsAndTruths")}
             >
               <View style={styles.categoryIcon}>
                 <Ionicons name="checkmark-circle" size={24} color="white" />
               </View>
               <Text style={styles.categoryText}>Mitos e verdades</Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={[styles.categoryCard, { backgroundColor: '#3B82F6' }]}
-              onPress={() => setCurrentScreen('RestrictedActivities')}
+
+            <TouchableOpacity
+              style={[styles.categoryCard, { backgroundColor: "#3B82F6" }]}
+              onPress={() => setCurrentScreen("RestrictedActivities")}
             >
               <View style={styles.categoryIcon}>
                 <Ionicons name="fitness" size={24} color="white" />
               </View>
               <Text style={styles.categoryText}>Atividades não indicadas</Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={[styles.categoryCard, { backgroundColor: '#EC4899' }]}
-              onPress={() => setCurrentScreen('FoodRestrictions')}
+
+            <TouchableOpacity
+              style={[styles.categoryCard, { backgroundColor: "#EC4899" }]}
+              onPress={() => setCurrentScreen("FoodRestrictions")}
             >
               <View style={styles.categoryIcon}>
                 <Ionicons name="restaurant" size={24} color="white" />
               </View>
               <Text style={styles.categoryText}>Restrições alimentares</Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={[styles.categoryCard, { backgroundColor: '#8B5CF6' }]}
-              onPress={() => setCurrentScreen('ContraindicatedMeds')}
+
+            <TouchableOpacity
+              style={[styles.categoryCard, { backgroundColor: "#8B5CF6" }]}
+              onPress={() => setCurrentScreen("ContraindicatedMeds")}
             >
               <View style={styles.categoryIcon}>
                 <Ionicons name="medical" size={24} color="white" />
@@ -188,26 +183,9 @@ export default function Saude({navigation, currentUser}) {
               <Text style={styles.categoryText}>Medicamentos contraindicados</Text>
             </TouchableOpacity>
           </View>
-          
-          {/* Segunda barra de pesquisa */}
-          <View style={styles.searchContainer}>
-            <View style={styles.searchBar}>
-              <TextInput
-                style={styles.searchInput}
-                placeholder="Buscar palavras chave"
-                placeholderTextColor="#999"
-              />
-              <Ionicons name="search" size={20} color="#999" />
-            </View>
-          </View>
-          
-          <TouchableOpacity style={styles.filterButton}>
-            <Ionicons name="funnel" size={16} color="#8B5CF6" />
-            <Text style={styles.filterText}>Filtrar</Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
-      
+
       {/* Bottom Navigation */}
       <View style={styles.bottomNav}>
         <TouchableOpacity style={styles.navItem}>
@@ -222,6 +200,7 @@ export default function Saude({navigation, currentUser}) {
       </View>
     </SafeAreaView>
   );
+
 
   // Tela de Mitos e Verdades
   const MythsAndTruths = () => (
@@ -361,65 +340,77 @@ export default function Saude({navigation, currentUser}) {
       <StatusBar barStyle="light-content" />
       
       <LinearGradient
-        colors={['#8B5CF6', '#A855F7', '#C084FC']}
-        style={styles.header}
+  colors={['#8B5CF6', '#A855F7', '#C084FC']}
+  style={[styles.header, { paddingHorizontal: 16 }]} // Padding menor para dar mais espaço ao texto
+>
+  {/* Botão de voltar */}
+  <TouchableOpacity
+    style={styles.backButton}
+    onPress={() => setCurrentScreen('UserProfile')}
+  >
+    <Ionicons name="chevron-back" size={24} color="white" />
+  </TouchableOpacity>
+
+  {/* Ícone e título */}
+  <View style={{ marginTop: 16, marginBottom: 16 }}>
+    <View style={styles.iconContainer}>
+      <Ionicons name="heart" size={20} color="white" />
+    </View>
+    <Text
+      style={{
+        color: 'white',
+        fontSize: 18,
+        lineHeight: 24,
+        marginTop: 8,
+        textAlign: 'left', // Mantém o texto alinhado à esquerda
+      }}
+    >
+      Saiba as principais restrições e indicações durante a gestação
+    </Text>
+  </View>
+
+  {/* Category Navigation */}
+  <View style={{ marginTop: 8 }}>
+    <View style={styles.categoryNav}>
+      <TouchableOpacity
+        style={[styles.categoryNavItem, { opacity: 0.7 }]}
+        onPress={() => setCurrentScreen('MythsAndTruths')}
       >
-        <View style={styles.headerContent}>
-          <TouchableOpacity 
-            style={styles.backButton}
-            onPress={() => setCurrentScreen('UserProfile')}
-          >
-            <Ionicons name="chevron-back" size={24} color="white" />
-          </TouchableOpacity>
-          
-          <View style={styles.headerInfo}>
-            <View style={styles.iconContainer}>
-              <Ionicons name="heart" size={20} color="white" />
-            </View>
-            <Text style={styles.headerTitle}>Saiba as principais restrições e indicações durante a gestação</Text>
-          </View>
+        <View style={[styles.categoryNavIcon, { backgroundColor: '#10B981' }]}>
+          <Ionicons name="checkmark-circle" size={20} color="white" />
         </View>
-        
-        {/* Category Navigation */}
-        <View style={styles.categoryNav}>
-          <TouchableOpacity 
-            style={[styles.categoryNavItem, { opacity: 0.7 }]}
-            onPress={() => setCurrentScreen('MythsAndTruths')}
-          >
-            <View style={[styles.categoryNavIcon, { backgroundColor: '#10B981' }]}>
-              <Ionicons name="checkmark-circle" size={20} color="white" />
-            </View>
-            <Text style={styles.categoryNavText}>Mitos e verdades</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.categoryNavItem}>
-            <View style={[styles.categoryNavIcon, { backgroundColor: '#3B82F6' }]}>
-              <Ionicons name="fitness" size={20} color="white" />
-            </View>
-            <Text style={styles.categoryNavText}>Atividades não indicadas</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={[styles.categoryNavItem, { opacity: 0.7 }]}
-            onPress={() => setCurrentScreen('FoodRestrictions')}
-          >
-            <View style={[styles.categoryNavIcon, { backgroundColor: '#EC4899' }]}>
-              <Ionicons name="restaurant" size={20} color="white" />
-            </View>
-            <Text style={styles.categoryNavText}>Restrições alimentares</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={[styles.categoryNavItem, { opacity: 0.7 }]}
-            onPress={() => setCurrentScreen('ContraindicatedMeds')}
-          >
-            <View style={[styles.categoryNavIcon, { backgroundColor: '#8B5CF6' }]}>
-              <Ionicons name="medical" size={20} color="white" />
-            </View>
-            <Text style={styles.categoryNavText}>Medicamentos contraindicados</Text>
-          </TouchableOpacity>
+        <Text style={styles.categoryNavText}>Mitos e verdades</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.categoryNavItem}>
+        <View style={[styles.categoryNavIcon, { backgroundColor: '#3B82F6' }]}>
+          <Ionicons name="fitness" size={20} color="white" />
         </View>
-      </LinearGradient>
+        <Text style={styles.categoryNavText}>Atividades não indicadas</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[styles.categoryNavItem, { opacity: 0.7 }]}
+        onPress={() => setCurrentScreen('FoodRestrictions')}
+      >
+        <View style={[styles.categoryNavIcon, { backgroundColor: '#EC4899' }]}>
+          <Ionicons name="restaurant" size={20} color="white" />
+        </View>
+        <Text style={styles.categoryNavText}>Restrições alimentares</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[styles.categoryNavItem, { opacity: 0.7 }]}
+        onPress={() => setCurrentScreen('ContraindicatedMeds')}
+      >
+        <View style={[styles.categoryNavIcon, { backgroundColor: '#8B5CF6' }]}>
+          <Ionicons name="medical" size={20} color="white" />
+        </View>
+        <Text style={styles.categoryNavText}>Medicamentos contraindicados</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</LinearGradient>
       
       <ScrollView 
         style={styles.content} 
@@ -953,21 +944,21 @@ export default function Saude({navigation, currentUser}) {
   );
 
   // Função para renderizar a tela atual
-  const renderCurrentScreen = () => {
+    const renderCurrentScreen = () => {
     switch (currentScreen) {
-      case 'HealthMain':
-        return <HealthMain navigation={screen}/>;
-      case 'UserProfile':
+      case "HealthMain":
+        return <HealthMain />;
+      case "UserProfile":
         return <UserProfile />;
-      case 'MythsAndTruths':
+      case "MythsAndTruths":
         return <MythsAndTruths />;
-      case 'RestrictedActivities':
+      case "RestrictedActivities":
         return <RestrictedActivities />;
-      case 'FoodRestrictions':
+      case "FoodRestrictions":
         return <FoodRestrictions />;
-      case 'ContraindicatedMeds':
+      case "ContraindicatedMeds":
         return <ContraindicatedMeds />;
-      case 'Vaccination':
+      case "Vaccination":
         return <Vaccination />;
       default:
         return <HealthMain />;
@@ -983,12 +974,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F9FA',
   },
     fullScreen: {
-    flex: 1,
-    justifyContent: "center", 
-    alignItems: "center", 
-    paddingHorizontal: 24,
-    paddingVertical: 32,
-  },
+  flex: 1,
+  justifyContent: 'center', 
+  alignItems: 'center',
+  paddingHorizontal: 24,
+  paddingVertical: 32,
+},
   header: {
     paddingHorizontal: 24,
     paddingTop: 16,
@@ -1358,4 +1349,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '500',
   },
+  centerContent: {
+  width: '100%',
+  alignItems: 'center',
+  marginTop: 40, 
+}
 });

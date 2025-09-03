@@ -7,17 +7,15 @@ import LoginScreen from'./screens/login';
 import CadScreen from'./screens/cadastro';
 import HomeScreen from'./screens/home';
 import Saude from './screens/saude';
-import Diario from './screens/diario';
 import agenda from './screens/agenda';
 import campanha from './screens/campanha';
-import Routes from './screens/routes'
+import Routes from './screens/routes/index';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Routes/>
-      </Stack.Navigator>
+      <Routes />
     </NavigationContainer>
   );
 }

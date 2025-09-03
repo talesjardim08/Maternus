@@ -10,7 +10,6 @@ import Appointments from "./Appointments"; // consultas
 import Agenda from "./agenda"; // agenda geral
 import Profile from "./Profile";
 import Notifications from "./Notifications";
-import Diario from "./diario";
 import Campanhas from "./campanha";
 import Saude from "./saude";
 
@@ -55,9 +54,9 @@ export default function Home({ navigation }) {
   ];
 
   const handleScreenChange = (screen) => {
-    // setCurrentScreen(screen);
+    // agora usamos o estado local para trocar telas internas (como o código já esperava)
+    setCurrentScreen(screen);
     setSideMenuOpen(false);
-    navigation.navigate(screen)
   };
 
   const handleUpdateProfile = (formData, avatar) => {
@@ -93,20 +92,20 @@ export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
       {/* Telas internas */}
-      {currentScreen === "dashboard" && <Dashboard {...sharedProps}/>}
+      {currentScreen === "dashboard" && <Dashboard {...sharedProps} />}
       {currentScreen === "appointments" && <Appointments {...sharedProps} />}
       {currentScreen === "agenda" && <Agenda {...sharedProps} />}
       {currentScreen === "profile" && <Profile {...sharedProps} />}
       {currentScreen === "notifications" && <Notifications {...sharedProps} />}
       {currentScreen === "diario" && <Diario {...sharedProps} />}
       {currentScreen === "campanhas" && <Campanhas {...sharedProps} />}
-      {currentScreen === "saude" && (<Saude navigation={navigation} currentUser={currentUser}/>)}
+      {currentScreen === "saude" && (<Saude navigation={navigation} currentUser={currentUser} />)}
 
-      {/* Card da usuária (abre Saude via navegação) */}
+      {/* Card da usuária (abre Saude via navegação interna agora) */}
       {currentScreen === "dashboard" && (
         <TouchableOpacity
           style={styles.userCard}
-          onPress={() => navigation.navigate("Saude")}
+          onPress={() => handleScreenChange("saude")}
         >
           <View style={styles.userIconContainer}>
             <Ionicons name="person" size={20} color="white" />
@@ -163,6 +162,7 @@ export default function Home({ navigation }) {
   );
 }
 
+// ... (styles permanecem os mesmos)
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F9FAFB" },
   userCard: {
