@@ -6,8 +6,7 @@ import HomeScreen from '../home';
 import Saude from '../saude';
 import Agenda from '../agenda';
 import Campanha from '../campanha';
-import DiarioNavigator from '../diario/diario-navigator'; // corrigido
-
+import DiarioNavigator from '../diario/ diario-navigator.js';
 const Stack = createNativeStackNavigator();
 
 export default function Routes() {

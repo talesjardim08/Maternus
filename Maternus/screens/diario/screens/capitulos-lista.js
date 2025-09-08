@@ -7,25 +7,38 @@ import {
   Image,
   FlatList,
   SafeAreaView,
+  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { CAPITULOS } from "../data/capitulos";
 import { getLastEntry } from "../storege/diario-store";
 import { useFocusEffect } from "@react-navigation/native";
+import { Image as RNImage } from "react-native";
+
+const placeholderUri = RNImage.resolveAssetSource(
+  require("../components/placeholder.png")
+).uri;
 
 export default function CapitulosLista({ navigation }) {
   const [items, setItems] = useState(
-    CAPITULOS.map((c) => ({ ...c, imagemAtual: c.imagemPadrao }))
+    CAPITULOS.map((c) => ({ ...c, imagemAtual: { uri: placeholderUri } }))
   );
 
-  // ao voltar de detalhes, recarrega imagens atuais
   useFocusEffect(
     useCallback(() => {
       (async () => {
         const updated = await Promise.all(
           CAPITULOS.map(async (c) => {
             const last = await getLastEntry(c.id);
-            return { ...c, imagemAtual: last?.imagemUri || c.imagemPadrao };
+            let imagemAtual;
+
+            if (last?.imagemUri) {
+              imagemAtual = { uri: last.imagemUri };
+            } else {
+              imagemAtual = { uri: placeholderUri };
+            }
+
+            return { ...c, imagemAtual };
           })
         );
         setItems(updated);
@@ -36,19 +49,31 @@ export default function CapitulosLista({ navigation }) {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => navigation.navigate("capitulo-detalhe", { capituloId: item.id })}
+      onPress={() =>
+        navigation.navigate("capitulo-detalhe", { capituloId: item.id })
+      }
     >
-      <Image source={{ uri: item.imagemAtual }} style={styles.cardImage} />
+      <Image
+        source={item.imagemAtual}
+        style={styles.cardImage}
+        resizeMode="cover"
+      />
       <View style={styles.cardRow}>
         <Text style={styles.cardTitle}>{item.titulo}</Text>
-        <Ionicons name="add-circle-outline" size={22} color="#6D28D9" />
+        <Ionicons
+          name="checkmark-circle"
+          size={22}
+          color={
+            item.imagemAtual.uri === placeholderUri ? "#6D28D9" : "#10B981"
+          }
+        />
       </View>
     </TouchableOpacity>
   );
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: Platform.OS === "android" ? 48 : 24 }]}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-back" size={22} color="#8B5CF6" />
         </TouchableOpacity>
@@ -70,7 +95,7 @@ export default function CapitulosLista({ navigation }) {
 const styles = StyleSheet.create({
   header: {
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: "#E5E7EB",
     flexDirection: "row",

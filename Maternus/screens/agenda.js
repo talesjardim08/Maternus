@@ -8,7 +8,7 @@ export default function Agenda() {
     </View>
   );
 }
-
+ 
 const styles = StyleSheet.create({
   container: { flex:1, justifyContent:"center", alignItems:"center", backgroundColor:"#F3F4F6" },
   text: { fontSize:24, fontWeight:"600", color:"#C084FC" },

@@ -12,6 +12,8 @@ import Profile from "./Profile";
 import Notifications from "./Notifications";
 import Campanhas from "./campanha";
 import Saude from "./saude";
+import DiarioNavigator from "../screens/diario/ diario-navigator.js";
+
 
 export default function Home({ navigation }) {
   const [currentScreen, setCurrentScreen] = useState("dashboard");
@@ -97,8 +99,7 @@ export default function Home({ navigation }) {
       {currentScreen === "agenda" && <Agenda {...sharedProps} />}
       {currentScreen === "profile" && <Profile {...sharedProps} />}
       {currentScreen === "notifications" && <Notifications {...sharedProps} />}
-      {currentScreen === "diario" && <Diario {...sharedProps} />}
-      {currentScreen === "campanhas" && <Campanhas {...sharedProps} />}
+      {currentScreen === "diario" && <DiarioNavigator />}
       {currentScreen === "saude" && (<Saude navigation={navigation} currentUser={currentUser} />)}
 
       {/* Card da usuária (abre Saude via navegação interna agora) */}
