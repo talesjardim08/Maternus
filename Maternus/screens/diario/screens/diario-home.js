@@ -1,4 +1,3 @@
-// DiarioHome.js
 import React, { useMemo, useState, useEffect } from "react";
 import {
   View,
@@ -30,7 +29,6 @@ export default function DiarioHome({ navigation }) {
 
   const placeholder = require("../components/placeholder.png");
 
-  // Carrega últimos envios e capítulos
   const loadCapitulos = async () => {
     const loaded = await Promise.all(
       CAPITULOS.map(async (c) => {
@@ -71,7 +69,6 @@ export default function DiarioHome({ navigation }) {
     return { dia, restante: `de ${restante}` };
   }, [hoje]);
 
-  // Atualiza galeria quando volta do CapituloDetalhe
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       loadCapitulos();
@@ -88,8 +85,17 @@ export default function DiarioHome({ navigation }) {
           style={styles.header}
         >
           <View style={styles.headerTop}>
+            {/* BOTÃO DE VOLTAR AJUSTADO */}
             <TouchableOpacity
-              onPress={() => navigation.goBack()} // ✅ corrigido para voltar para a Home sem recriar
+              onPress={() => {
+                console.log("navigation object:", navigation);
+                console.log("canGoBack:", navigation.canGoBack());
+                if (navigation.canGoBack()) {
+                  navigation.goBack();
+                } else {
+                  navigation.getParent()?.navigate("Home");
+                }
+              }}
               hitSlop={8}
             >
               <Ionicons name="chevron-back" size={24} color="#fff" />
@@ -111,7 +117,7 @@ export default function DiarioHome({ navigation }) {
           </Text>
         </LinearGradient>
 
-        {/* CARD DA DATA + FORMULÁRIO RESUMO */}
+        {/* CARD DA DATA + FORMULÁRIO */}
         <View style={styles.dateCard}>
           <Text style={styles.dateNumber}>{dataFormatada.dia}</Text>
           <Text style={styles.dateRestante}>{dataFormatada.restante}</Text>
@@ -178,7 +184,10 @@ export default function DiarioHome({ navigation }) {
                 key={c.id}
                 style={styles.card}
                 onPress={() =>
-                  navigation.navigate("capitulo-detalhe", { capituloId: c.id, novo: false })
+                  navigation.navigate("capitulo-detalhe", {
+                    capituloId: c.id,
+                    novo: false,
+                  })
                 }
               >
                 <Image source={c.imagemAtual} style={styles.cardImage} />
@@ -204,7 +213,9 @@ export default function DiarioHome({ navigation }) {
             end={{ x: 1, y: 0 }}
             style={styles.addPageGradient}
           >
-            <Text style={styles.addPageText}>Adicione uma página à sua história</Text>
+            <Text style={styles.addPageText}>
+              Adicione uma página à sua história
+            </Text>
             <Ionicons name="add-circle" size={26} color="#fff" />
           </LinearGradient>
         </TouchableOpacity>

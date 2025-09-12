@@ -1,4 +1,3 @@
-// Dashboard.js
 import React from "react";
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Modal } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -29,7 +28,8 @@ export default function Dashboard({
         handleScreenChange("saude");
         break;
       case "diario":
-        handleScreenChange("diario");
+        // ✅ Alterado: agora usa navegação do stack principal
+        navigation.navigate("Diario");
         break;
       case "agenda":
         handleScreenChange("agenda");

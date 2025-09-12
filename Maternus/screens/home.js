@@ -1,4 +1,3 @@
-// Home.js
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Alert, Text } from "react-native";
 import Svg, { Path } from "react-native-svg";
@@ -12,8 +11,6 @@ import Profile from "./Profile";
 import Notifications from "./Notifications";
 import Campanhas from "./campanha";
 import Saude from "./saude";
-import DiarioNavigator from "../screens/diario/ diario-navigator.js";
-
 
 export default function Home({ navigation }) {
   const [currentScreen, setCurrentScreen] = useState("dashboard");
@@ -56,7 +53,6 @@ export default function Home({ navigation }) {
   ];
 
   const handleScreenChange = (screen) => {
-    // agora usamos o estado local para trocar telas internas (como o código já esperava)
     setCurrentScreen(screen);
     setSideMenuOpen(false);
   };
@@ -99,10 +95,10 @@ export default function Home({ navigation }) {
       {currentScreen === "agenda" && <Agenda {...sharedProps} />}
       {currentScreen === "profile" && <Profile {...sharedProps} />}
       {currentScreen === "notifications" && <Notifications {...sharedProps} />}
-      {currentScreen === "diario" && <DiarioNavigator />}
+      {/* REMOVIDO: {currentScreen === "diario" && <DiarioNavigator />} */}
       {currentScreen === "saude" && (<Saude navigation={navigation} currentUser={currentUser} />)}
 
-      {/* Card da usuária (abre Saude via navegação interna agora) */}
+      {/* Card da usuária */}
       {currentScreen === "dashboard" && (
         <TouchableOpacity
           style={styles.userCard}
@@ -163,7 +159,6 @@ export default function Home({ navigation }) {
   );
 }
 
-// ... (styles permanecem os mesmos)
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F9FAFB" },
   userCard: {
