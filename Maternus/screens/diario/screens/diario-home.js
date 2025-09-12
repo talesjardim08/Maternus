@@ -1,3 +1,4 @@
+// DiarioHome.js
 import React, { useMemo, useState, useEffect } from "react";
 import {
   View,
@@ -87,7 +88,10 @@ export default function DiarioHome({ navigation }) {
           style={styles.header}
         >
           <View style={styles.headerTop}>
-            <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={8}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()} // ✅ corrigido para voltar para a Home sem recriar
+              hitSlop={8}
+            >
               <Ionicons name="chevron-back" size={24} color="#fff" />
             </TouchableOpacity>
 
@@ -129,16 +133,16 @@ export default function DiarioHome({ navigation }) {
             <Text style={styles.formBtnText}>Abrir Formulário</Text>
           </TouchableOpacity>
 
-          {ultimoEnvio ? (
+          {ultimoEnvio && (
             <View style={styles.lastRow}>
               <Ionicons name="checkmark-circle" size={16} color="#10B981" />
               <Text style={styles.lastText}>
-                Último envio: Exercício {ultimoEnvio.exercicio?.toLowerCase?.()},{" "}
+                Último envio: Exercício {ultimoEnvio.exercicio?.toLowerCase?.()},
                 Atividade {ultimoEnvio.atividade?.toLowerCase?.()}, Trabalho{" "}
                 {ultimoEnvio.trabalho?.toLowerCase?.()}
               </Text>
             </View>
-          ) : null}
+          )}
 
           <TouchableOpacity
             style={styles.historyBtn}
@@ -192,18 +196,19 @@ export default function DiarioHome({ navigation }) {
           onPress={() =>
             navigation.navigate("capitulo-detalhe", { novo: true })
           }
+          activeOpacity={0.8}
         >
-          <Text style={styles.addPageText}>Adicione uma página à sua história</Text>
-          <Ionicons name="add-circle" size={22} color="#fff" />
+          <LinearGradient
+            colors={["#7C3AED", "#A855F7"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.addPageGradient}
+          >
+            <Text style={styles.addPageText}>Adicione uma página à sua história</Text>
+            <Ionicons name="add-circle" size={26} color="#fff" />
+          </LinearGradient>
         </TouchableOpacity>
       </ScrollView>
-
-      {/* BOTTOM NAV (visual) */}
-      <View style={styles.bottomNav}>
-        <Ionicons name="people" size={24} color="#F0ABFC" />
-        <Ionicons name="home" size={24} color="#F0ABFC" />
-        <Ionicons name="heart" size={24} color="#F0ABFC" />
-      </View>
 
       <FormularioDiarioModal
         visible={formVisible}
@@ -226,9 +231,12 @@ const styles = StyleSheet.create({
   headerTop: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   headerInfo: { flexDirection: "row", alignItems: "center", gap: 10 },
   headerIcon: {
-    width: 26, height: 26, borderRadius: 13,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
     backgroundColor: "rgba(255,255,255,0.3)",
-    justifyContent: "center", alignItems: "center",
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerTitle: { color: "#fff", fontWeight: "700", fontSize: 20 },
   headerSubtitle: { color: "white", marginTop: 10, lineHeight: 20, fontSize: 14, opacity: 0.95 },
@@ -322,21 +330,24 @@ const styles = StyleSheet.create({
   addPageCta: {
     marginTop: 12,
     marginHorizontal: 24,
-    backgroundColor: "#7C3AED",
-    paddingVertical: 16,
-    paddingHorizontal: 24,
+    borderRadius: 16,
+    overflow: "hidden",
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 6,
+  },
+  addPageGradient: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    paddingVertical: 16,
+    paddingHorizontal: 24,
   },
-  addPageText: { color: "white", fontWeight: "700" },
-
-  bottomNav: {
-    position: "absolute", bottom: 0, left: 0, right: 0,
-    height: 56,
-    borderTopWidth: 1, borderTopColor: "#E5E7EB",
-    backgroundColor: "white",
-    alignItems: "center", justifyContent: "space-around",
-    flexDirection: "row",
+  addPageText: { 
+    color: "#fff", 
+    fontWeight: "700", 
+    fontSize: 16,
   },
 });

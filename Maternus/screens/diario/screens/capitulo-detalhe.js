@@ -15,8 +15,9 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { CAPITULOS } from "../data/capitulos";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Image as RNImage } from "react-native";
 
+// Converte require em URI
+import { Image as RNImage } from "react-native";
 const placeholderUri = RNImage.resolveAssetSource(
   require("../components/placeholder.png")
 ).uri;
@@ -32,7 +33,7 @@ export default function CapituloDetalhe({ route, navigation }) {
   const [texto, setTexto] = useState("");
   const [imagemUri, setImagemUri] = useState({ uri: placeholderUri });
 
-  // Carrega dados salvos
+  // Carregar dados salvos
   useEffect(() => {
     if (!capituloId) return;
     (async () => {
@@ -41,6 +42,7 @@ export default function CapituloDetalhe({ route, navigation }) {
         if (raw) {
           const data = JSON.parse(raw);
           if (data.texto) setTexto(data.texto);
+          if (data.titulo) setTitulo(data.titulo);
           if (data.imagemUri) setImagemUri({ uri: data.imagemUri });
         }
       } catch (e) {
@@ -49,36 +51,45 @@ export default function CapituloDetalhe({ route, navigation }) {
     })();
   }, [capituloId]);
 
-  // Permite escolher imagem
+  // Botão único para adicionar/imagem e permitir corte
   const pickImage = async () => {
-    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permission.granted) {
-      Alert.alert("Permissão necessária", "Permita acesso à galeria.");
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert(
+        "Permissão necessária",
+        "Permita acesso à galeria para selecionar imagens."
+      );
       return;
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 0.7,
+      allowsEditing: true, // 🔹 permite cortar/enquadrar direto
+      aspect: [4, 3],
+      quality: 0.8,
     });
 
-    if (!result.canceled) {
-      setImagemUri({ uri: result.assets[0].uri });
-    }
+    if (result.canceled || !result.assets?.length) return;
+
+    setImagemUri({ uri: result.assets[0].uri });
   };
 
-  // Salvar capítulo
   const handleSave = async () => {
-    if (!texto.trim() && imagemUri.uri === placeholderUri && !titulo.trim()) {
+    if (!titulo.trim()) {
+      Alert.alert("Ops!", "Digite um título para o capítulo.");
+      return;
+    }
+
+    if (!texto.trim() && imagemUri.uri === placeholderUri) {
       Alert.alert(
         "Ops!",
-        "É necessário adicionar texto, título ou uma imagem antes de salvar."
+        "É necessário adicionar texto ou uma imagem antes de salvar."
       );
       return;
     }
 
     const payload = {
-      titulo: titulo || capitulo?.titulo || "Sem título",
+      titulo,
       texto,
       imagemUri: imagemUri.uri,
       criadoEm: new Date().toISOString(),
@@ -96,25 +107,19 @@ export default function CapituloDetalhe({ route, navigation }) {
     }
   };
 
-  // Excluir capítulo
   const handleDelete = async () => {
     if (!capituloId || capituloId.startsWith("novo-")) {
       Alert.alert("Atenção", "Não é possível deletar capítulos padrão.");
       return;
     }
-
     Alert.alert("Excluir capítulo", "Deseja realmente excluir este capítulo?", [
       { text: "Cancelar", style: "cancel" },
       {
         text: "Excluir",
         style: "destructive",
         onPress: async () => {
-          try {
-            await AsyncStorage.removeItem(`capitulo:${capituloId}`);
-            navigation.goBack();
-          } catch (e) {
-            Alert.alert("Erro", "Não foi possível excluir o capítulo.");
-          }
+          await AsyncStorage.removeItem(`capitulo:${capituloId}`);
+          navigation.goBack();
         },
       },
     ]);
@@ -124,11 +129,14 @@ export default function CapituloDetalhe({ route, navigation }) {
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView contentContainerStyle={{ paddingBottom: 96 }}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={{ padding: 8 }}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={{ padding: 8 }}
+          >
             <Ionicons name="chevron-back" size={22} color="#8B5CF6" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>
-            {novo ? "Novo capítulo" : `Capítulo: ${capitulo?.titulo}`}
+            {novo ? "Novo capítulo" : `Capítulo`}
           </Text>
           <View style={{ width: 22 }} />
         </View>
@@ -140,24 +148,22 @@ export default function CapituloDetalhe({ route, navigation }) {
 
         {/* Upload */}
         <View style={styles.uploadBox}>
-          <Text style={styles.uploadTitle}>Adicionar/Alterar foto do capítulo</Text>
+          <Text style={styles.uploadTitle}>Adicionar / Ajustar imagem</Text>
           <TouchableOpacity style={styles.clip} onPress={pickImage}>
-            <Ionicons name="attach" size={36} color="white" />
+            <Ionicons name="image" size={36} color="white" />
           </TouchableOpacity>
         </View>
 
         {/* Título */}
-        {novo && (
-          <View style={styles.textBox}>
-            <Text style={styles.textLabel}>Título do capítulo</Text>
-            <TextInput
-              style={styles.textarea}
-              placeholder="Digite o título do capítulo"
-              value={titulo}
-              onChangeText={setTitulo}
-            />
-          </View>
-        )}
+        <View style={styles.textBox}>
+          <Text style={styles.textLabel}>Título do capítulo</Text>
+          <TextInput
+            style={styles.textarea}
+            placeholder="Digite o título do capítulo"
+            value={titulo}
+            onChangeText={setTitulo}
+          />
+        </View>
 
         {/* Texto */}
         <View style={styles.textBox}>
@@ -194,8 +200,7 @@ export default function CapituloDetalhe({ route, navigation }) {
 const styles = StyleSheet.create({
   header: {
     paddingHorizontal: 16,
-    paddingTop: Platform.OS === "android" ? 48 : 24,
-    paddingBottom: 12,
+    paddingVertical: Platform.OS === "android" ? 24 : 16,
     borderBottomWidth: 1,
     borderBottomColor: "#E5E7EB",
     flexDirection: "row",
@@ -224,12 +229,12 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: "center",
   },
-  uploadTitle: { color: "#7C3AED", fontWeight: "600" },
+  uploadTitle: { color: "#7C3AED", fontWeight: "600", marginBottom: 8 },
   clip: {
-    marginTop: 12,
+    marginTop: 4,
     backgroundColor: "#7C3AED",
-    height: 90,
-    width: 90,
+    height: 80,
+    width: 80,
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
