@@ -32,7 +32,7 @@ export default function Dashboard({
         navigation.navigate("Diario");
         break;
       case "agenda":
-        handleScreenChange("agenda");
+        navigation.navigate("Agenda");
         break;
       case "campanhas":
         handleScreenChange("campanhas");

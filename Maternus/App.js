@@ -10,6 +10,8 @@ import Saude from './screens/saude';
 import agenda from './screens/agenda';
 import campanha from './screens/campanha';
 import Routes from './screens/routes/index';
+import 'react-native-gesture-handler';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
