@@ -35,7 +35,7 @@ export default function Dashboard({
         navigation.navigate("Agenda");
         break;
       case "campanhas":
-        handleScreenChange("campanhas");
+        navigation.navigate("Campanhas-App");
         break;
       case "appointments":
       case "atendimentos":

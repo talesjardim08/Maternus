@@ -5,10 +5,10 @@ import LoginScreen from '../login';
 import CadScreen from '../cadastro';
 import HomeScreen from '../home';
 import Saude from '../saude';
-import Agenda from '../agenda';
 import Campanha from '../campanha';
 import DiarioNavigator from '../diario/ diario-navigator.js';
 import AgendaNavigator from '../agenda/agenda-navigator.js';
+import CampanhasApp from '../campanhas/campanhasApp.js';
 const Stack = createNativeStackNavigator();
 
 export default function Routes() {
@@ -20,8 +20,8 @@ export default function Routes() {
       <Stack.Screen name="Diario" component={DiarioNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="Agenda" component={AgendaNavigator} options={{headerShown: false}} />
       <Stack.Screen name="Saude" component={Saude} options={{ headerShown: false }} />
-      <Stack.Screen name="Agenda-placeholder" component={Agenda} />
-      <Stack.Screen name="Campanhas" component={Campanha} />
+      <Stack.Screen name="Campanhaas-placeholder" component={Campanha} />
+      <Stack.Screen name="Campanhas-App" component={CampanhasApp} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
