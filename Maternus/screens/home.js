@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
+
 import Dashboard from "./Dashboard";
 import Appointments from "./Appointments";
 import Agenda from "./agenda";
@@ -9,7 +11,6 @@ import Notifications from "./Notifications";
 import Saude from "./saude";
 
 export default function Home({ navigation }) {
-  const [currentScreen, setCurrentScreen] = useState("dashboard");
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
   const [exitModalOpen, setExitModalOpen] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
@@ -24,22 +25,8 @@ export default function Home({ navigation }) {
   };
 
   const appointments = [
-    {
-      id: "1",
-      date: "00/00/0000",
-      type: "Consulta",
-      specialty: "Obstetriz",
-      time: "12:00",
-      location: "Hospital Minha Vida, Rua Angélica - Jd. Santana, Nº 50, São Paulo, SP",
-    },
-    {
-      id: "2",
-      date: "00/00/0000",
-      type: "Consulta",
-      specialty: "Ginecologista",
-      time: "15:00",
-      location: "Hospital Minha Vida, Rua Angélica - Jd. Santana, Nº 50, São Paulo, SP",
-    },
+    { id: "1", date: "00/00/0000", type: "Consulta", specialty: "Obstetriz", time: "12:00", location: "Hospital Minha Vida" },
+    { id: "2", date: "00/00/0000", type: "Consulta", specialty: "Ginecologista", time: "15:00", location: "Hospital Minha Vida" },
   ];
 
   const notifications = [
@@ -48,26 +35,23 @@ export default function Home({ navigation }) {
     { id: "3", title: "Dica de saúde", message: "Beba bastante água durante a gravidez", time: "1 dia atrás" },
   ];
 
-  const handleScreenChange = (screen) => {
-    setCurrentScreen(screen);
-    setSideMenuOpen(false);
-  };
-
-  const handleUpdateProfile = (formData, avatar) => setSuccessModalOpen(true);
-
+  // Mantemos as funções, mas agora usam navigation
   const handleExit = () => {
     setExitModalOpen(false);
     Alert.alert("Saindo do aplicativo", "Até breve, mamãe!");
   };
 
-  const removeNotification = (id) => {};
+  const removeNotification = (id) => {
+    console.log("Removendo notificação", id);
+  };
+
+  const handleUpdateProfile = (formData, avatar) => setSuccessModalOpen(true);
 
   const sharedProps = {
     currentUser,
     appointments,
     notifications,
     removeNotification,
-    handleScreenChange,
     handleUpdateProfile,
     handleExit,
     sideMenuOpen,
@@ -81,29 +65,25 @@ export default function Home({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="light" />
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Renderiza a tela atual */}
-        {currentScreen === "dashboard" && <Dashboard {...sharedProps} />}
-        {currentScreen === "appointments" && <Appointments {...sharedProps} />}
-        {currentScreen === "agenda" && <Agenda {...sharedProps} />}
-        {currentScreen === "profile" && <Profile {...sharedProps} />}
-        {currentScreen === "notifications" && <Notifications {...sharedProps} />}
-        {currentScreen === "saude" && <Saude navigation={navigation} currentUser={currentUser} />}
+        <Dashboard {...sharedProps} />
       </ScrollView>
 
       {/* Card da usuária */}
-      {currentScreen === "dashboard" && (
-        <TouchableOpacity style={styles.userCard} onPress={() => handleScreenChange("saude")}>
-          <View style={styles.userIconContainer}>
-            <Ionicons name="person" size={20} color="white" />
-          </View>
-          <View style={styles.userInfo}>
-            <Text style={styles.userName}>Maria da Silva (EU)</Text>
-            <Text style={styles.userRole}>Gestante</Text>
-          </View>
-          <Ionicons name="chevron-forward" size={20} color="white" />
-        </TouchableOpacity>
-      )}
+      <TouchableOpacity
+        style={styles.userCard}
+        onPress={() => navigation.navigate("Saude", { currentUser })}
+      >
+        <View style={styles.userIconContainer}>
+          <Ionicons name="person-outline" size={20} color="white" />
+        </View>
+        <View style={styles.userInfo}>
+          <Text style={styles.userName}>Maria da Silva (EU)</Text>
+          <Text style={styles.userRole}>Gestante</Text>
+        </View>
+        <Ionicons name="chevron-forward" size={20} color="white" />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -111,7 +91,6 @@ export default function Home({ navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F9FAFB" },
   content: { flex: 1, paddingBottom: 16 },
-
   userCard: {
     flexDirection: "row",
     alignItems: "center",

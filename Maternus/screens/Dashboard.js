@@ -1,7 +1,8 @@
+// Dashboard.js
 import React from "react";
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Modal } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { AntDesign, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
+import { MaterialIcons, FontAwesome5, Ionicons } from "@expo/vector-icons";
 
 export default function Dashboard({
   currentUser,
@@ -11,39 +12,17 @@ export default function Dashboard({
   exitModalOpen,
   setExitModalOpen,
   handleExit,
-  handleScreenChange,
   navigation,
 }) {
   const modules = [
-    { label: "Saude", icon: <MaterialIcons name="local-hospital" size={36} color="white" /> },
-    { label: "Diario", icon: <FontAwesome5 name="book" size={36} color="white" /> },
-    { label: "Agenda", icon: <AntDesign name="calendar" size={36} color="white" /> },
-    { label: "Campanhas", icon: <MaterialIcons name="campaign" size={36} color="white" /> },
+    { label: "Saude", icon: <MaterialIcons name="local-hospital" size={36} color="white" />, screen: "Saude" },
+    { label: "Diario", icon: <FontAwesome5 name="book" size={36} color="white" />, screen: "Diario" },
+    { label: "Agenda", icon: <MaterialIcons name="calendar-today" size={36} color="white" />, screen: "Agenda" },
+    { label: "Campanhas", icon: <MaterialIcons name="campaign" size={36} color="white" />, screen: "Campanhas-App" },
   ];
 
-  const handleModulePress = (moduleLabel) => {
-    const key = String(moduleLabel).toLowerCase();
-    switch (key) {
-      case "saude":
-        handleScreenChange("saude");
-        break;
-      case "diario":
-        // ✅ Alterado: agora usa navegação do stack principal
-        navigation.navigate("Diario");
-        break;
-      case "agenda":
-        navigation.navigate("Agenda");
-        break;
-      case "campanhas":
-        navigation.navigate("Campanhas-App");
-        break;
-      case "appointments":
-      case "atendimentos":
-        handleScreenChange("appointments");
-        break;
-      default:
-        console.warn("Módulo não mapeado:", moduleLabel);
-    }
+  const handleModulePress = (screen) => {
+    navigation.navigate(screen);
   };
 
   return (
@@ -57,18 +36,17 @@ export default function Dashboard({
       >
         <View style={styles.headerTop}>
           <TouchableOpacity style={styles.headerButton} onPress={() => setSideMenuOpen(true)}>
-            <AntDesign name="menuunfold" size={24} color="white" />
+            <Ionicons name="menu" size={24} color="white" />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.headerButton}
-            onPress={() => handleScreenChange("notifications")}
-          >
-            <AntDesign name="bells" size={24} color="white" />
+
+          <TouchableOpacity style={styles.headerButton} onPress={() => navigation.navigate("Notifications")}>
+            <Ionicons name="notifications-outline" size={24} color="white" />
           </TouchableOpacity>
         </View>
+
         <View style={styles.userInfo}>
           <View style={styles.avatar}>
-            <AntDesign name="user" size={32} color="white" />
+            <Ionicons name="person" size={32} color="white" />
           </View>
           <View>
             <Text style={styles.userName}>{currentUser?.name || "Usuário"}</Text>
@@ -79,14 +57,13 @@ export default function Dashboard({
 
       {/* CONTEÚDO */}
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* MÓDULOS */}
         <View style={styles.modulesContainer}>
           <View style={styles.moduleGrid}>
             {modules.map((item, index) => (
               <TouchableOpacity
                 key={index}
                 activeOpacity={0.8}
-                onPress={() => handleModulePress(item.label)}
+                onPress={() => handleModulePress(item.screen)}
                 style={styles.moduleWrapper}
               >
                 <LinearGradient
@@ -107,7 +84,7 @@ export default function Dashboard({
         <View style={styles.appointmentsSection}>
           <TouchableOpacity
             style={styles.appointmentsButton}
-            onPress={() => handleScreenChange("appointments")}
+            onPress={() => navigation.navigate("Agenda")}
           >
             <Text style={styles.appointmentsButtonText}>Próximos atendimentos</Text>
           </TouchableOpacity>
@@ -147,7 +124,7 @@ export default function Dashboard({
           <View style={styles.sideMenu}>
             <LinearGradient colors={["#8B5CF6", "#A855F7", "#C084FC"]} style={styles.sideMenuHeader}>
               <View style={styles.sideMenuAvatar}>
-                <AntDesign name="user" size={24} color="white" />
+                <Ionicons name="person" size={24} color="white" />
               </View>
               <View>
                 <Text style={styles.sideMenuName}>{currentUser?.name || "Usuário"}</Text>
@@ -155,10 +132,10 @@ export default function Dashboard({
               </View>
             </LinearGradient>
             <View style={styles.sideMenuContent}>
-              <TouchableOpacity style={styles.menuItem} onPress={() => handleScreenChange("dashboard")}>
+              <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("HomeStack")}>
                 <Text style={styles.menuItemText}>Início</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem} onPress={() => handleScreenChange("profile")}>
+              <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Profile")}>
                 <Text style={styles.menuItemText}>Editar meus dados pessoais</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.menuItem} onPress={() => setExitModalOpen(true)}>

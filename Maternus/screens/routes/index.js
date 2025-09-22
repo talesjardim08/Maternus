@@ -7,6 +7,7 @@ import DiarioNavigator from "../diario/ diario-navigator";
 import AgendaNavigator from "../agenda/agenda-navigator";
 import CampanhasApp from "../campanhas/campanhasApp";
 import TabNavigator from "./TabNavigator";
+import Notifications from "../Notifications";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,7 +21,8 @@ export default function Routes() {
       {/* App principal com tabs */}
       <Stack.Screen name="Main" component={TabNavigator} />
 
-      {/* Telas push (stack acima das tabs) */}
+      {/* Telas do stack acima das tabs */}
+      <Stack.Screen name="Notifications" component={Notifications} />
       <Stack.Screen name="Diario" component={DiarioNavigator} />
       <Stack.Screen name="Agenda" component={AgendaNavigator} />
       <Stack.Screen name="Saude" component={Saude} />

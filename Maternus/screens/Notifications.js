@@ -1,15 +1,22 @@
-// Notifications.js
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
-export default function Notifications({ notifications = [], removeNotification, handleScreenChange }) {
+export default function Notifications({ navigation }) {
+  const [notifications, setNotifications] = useState([
+    { id: "1", title: "Consulta agendada", message: "Sua consulta foi agendada para amanhã às 14h", time: "2h atrás" },
+    { id: "2", title: "Lembrete de medicação", message: "Não esqueça de tomar seu ácido fólico", time: "4h atrás" },
+    { id: "3", title: "Dica de saúde", message: "Beba bastante água durante a gravidez", time: "1 dia atrás" },
+  ]);
+
+  const removeNotification = (id) => setNotifications(prev => prev.filter(n => n.id !== id));
+
   return (
     <ScrollView style={styles.screen} contentContainerStyle={{ paddingBottom: 40 }}>
       {/* HEADER */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => handleScreenChange("dashboard")} style={styles.backButton}>
-          <AntDesign name="arrowleft" size={24} color="#8B5CF6" />
+        <TouchableOpacity onPress={() => navigation.navigate("HomeStack")} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color="#8B5CF6" />
           <Text style={styles.backText}>Voltar</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Notificações</Text>
@@ -25,7 +32,7 @@ export default function Notifications({ notifications = [], removeNotification, 
               <View style={styles.notificationHeader}>
                 <Text style={styles.notificationTitle}>{notif.title}</Text>
                 <TouchableOpacity onPress={() => removeNotification(notif.id)}>
-                  <AntDesign name="close" size={20} color="#9CA3AF" />
+                  <Ionicons name="close" size={20} color="#9CA3AF" />
                 </TouchableOpacity>
               </View>
               <Text style={styles.notificationMessage}>{notif.message}</Text>
@@ -56,12 +63,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 3,
   },
-  notificationHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-  },
+  notificationHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 8 },
   notificationTitle: { fontSize: 16, fontWeight: "600", color: "#1F2937" },
   notificationMessage: { fontSize: 14, color: "#4B5563", marginBottom: 4 },
   notificationTime: { fontSize: 12, color: "#9CA3AF" },
