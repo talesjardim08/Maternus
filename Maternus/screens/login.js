@@ -9,7 +9,7 @@ export default function Login({ navigation }) {
 
   const UserTeste = { 
     cpfOuCnpj: '12345678900',
-    senha: 'TAMASOJO3301'
+    senha: '3301'
   };
 
   const verificarLogin = () => {

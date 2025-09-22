@@ -1,14 +1,10 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Alert } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 
 import Dashboard from "./Dashboard";
-import Appointments from "./Appointments";
-import Agenda from "./agenda";
 import Profile from "./Profile";
-import Notifications from "./Notifications";
-import Saude from "./saude";
 
 export default function Home({ navigation }) {
   const [sideMenuOpen, setSideMenuOpen] = useState(false);
@@ -29,62 +25,43 @@ export default function Home({ navigation }) {
     { id: "2", date: "00/00/0000", type: "Consulta", specialty: "Ginecologista", time: "15:00", location: "Hospital Minha Vida" },
   ];
 
-  const notifications = [
-    { id: "1", title: "Consulta agendada", message: "Sua consulta foi agendada para amanhã às 14h", time: "2h atrás" },
-    { id: "2", title: "Lembrete de medicação", message: "Não esqueça de tomar seu ácido fólico", time: "4h atrás" },
-    { id: "3", title: "Dica de saúde", message: "Beba bastante água durante a gravidez", time: "1 dia atrás" },
-  ];
+  const handleUpdateProfile = (formData, avatar) => {
+    setSuccessModalOpen(true);
+  };
 
-  // Mantemos as funções, mas agora usam navigation
   const handleExit = () => {
     setExitModalOpen(false);
-    Alert.alert("Saindo do aplicativo", "Até breve, mamãe!");
+    alert("Saindo do aplicativo! Até breve, mamãe!");
   };
-
-  const removeNotification = (id) => {
-    console.log("Removendo notificação", id);
-  };
-
-  const handleUpdateProfile = (formData, avatar) => setSuccessModalOpen(true);
 
   const sharedProps = {
     currentUser,
     appointments,
-    notifications,
-    removeNotification,
-    handleUpdateProfile,
-    handleExit,
     sideMenuOpen,
     setSideMenuOpen,
     exitModalOpen,
     setExitModalOpen,
     successModalOpen,
     setSuccessModalOpen,
+    handleUpdateProfile,
+    handleExit,
     navigation,
   };
 
-  return (
-    <View style={styles.container}>
-      <StatusBar style="light" />
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <Dashboard {...sharedProps} />
-      </ScrollView>
-
-      {/* Card da usuária */}
-      <TouchableOpacity
-        style={styles.userCard}
-        onPress={() => navigation.navigate("Saude", { currentUser })}
-      >
-        <View style={styles.userIconContainer}>
-          <Ionicons name="person-outline" size={20} color="white" />
-        </View>
-        <View style={styles.userInfo}>
-          <Text style={styles.userName}>Maria da Silva (EU)</Text>
-          <Text style={styles.userRole}>Gestante</Text>
-        </View>
-        <Ionicons name="chevron-forward" size={20} color="white" />
-      </TouchableOpacity>
-    </View>
+   return (
+    <Dashboard
+      currentUser={currentUser}
+      appointments={appointments}
+      sideMenuOpen={sideMenuOpen}
+      setSideMenuOpen={setSideMenuOpen}
+      exitModalOpen={exitModalOpen}
+      setExitModalOpen={setExitModalOpen}
+      successModalOpen={successModalOpen}
+      setSuccessModalOpen={setSuccessModalOpen}
+      handleUpdateProfile={handleUpdateProfile}
+      handleExit={handleExit}
+      navigation={navigation}
+    />
   );
 }
 

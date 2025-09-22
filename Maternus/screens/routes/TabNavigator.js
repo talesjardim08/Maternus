@@ -1,5 +1,4 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -51,17 +50,12 @@ export default function TabNavigator() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = {
   tabBar: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
     backgroundColor: "#fff",
     borderTopWidth: 1,
     borderTopColor: "#E5E7EB",
     height: 70,
-    paddingBottom: 12,
     paddingTop: 8,
   },
-});
+};

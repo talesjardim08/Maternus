@@ -1,4 +1,3 @@
-// Dashboard.js
 import React from "react";
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Modal } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -7,12 +6,12 @@ import { MaterialIcons, FontAwesome5, Ionicons } from "@expo/vector-icons";
 export default function Dashboard({
   currentUser,
   appointments = [],
+  navigation,
   sideMenuOpen,
   setSideMenuOpen,
   exitModalOpen,
   setExitModalOpen,
   handleExit,
-  navigation,
 }) {
   const modules = [
     { label: "Saude", icon: <MaterialIcons name="local-hospital" size={36} color="white" />, screen: "Saude" },
@@ -38,7 +37,6 @@ export default function Dashboard({
           <TouchableOpacity style={styles.headerButton} onPress={() => setSideMenuOpen(true)}>
             <Ionicons name="menu" size={24} color="white" />
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.headerButton} onPress={() => navigation.navigate("Notifications")}>
             <Ionicons name="notifications-outline" size={24} color="white" />
           </TouchableOpacity>
@@ -132,10 +130,10 @@ export default function Dashboard({
               </View>
             </LinearGradient>
             <View style={styles.sideMenuContent}>
-              <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("HomeStack")}>
+              <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Main")}>
                 <Text style={styles.menuItemText}>Início</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Profile")}>
+              <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate("Profile", { currentUser })}>
                 <Text style={styles.menuItemText}>Editar meus dados pessoais</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.menuItem} onPress={() => setExitModalOpen(true)}>
@@ -184,7 +182,6 @@ const styles = StyleSheet.create({
   },
   userName: { fontSize: 24, fontWeight: "500", color: "white" },
   userRole: { fontSize: 18, color: "rgba(255,255,255,0.9)" },
-
   content: { flex: 1 },
   modulesContainer: { paddingHorizontal: 24, marginTop: 24, marginBottom: 32 },
   moduleGrid: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" },
@@ -202,7 +199,6 @@ const styles = StyleSheet.create({
   },
   moduleIcon: { marginBottom: 12 },
   moduleText: { color: "white", fontSize: 18, fontWeight: "600", textAlign: "center" },
-
   appointmentsSection: { paddingHorizontal: 24, marginBottom: 24 },
   appointmentsButton: {
     borderRadius: 16,
@@ -236,7 +232,6 @@ const styles = StyleSheet.create({
   appointmentDateText: { color: "white", fontWeight: "700" },
   appointmentDetail: { fontSize: 15, color: "#374151", marginBottom: 4 },
   appointmentLabel: { fontWeight: "700" },
-
   modalOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)" },
   sideMenu: { width: 280, backgroundColor: "white", height: "100%" },
   sideMenuHeader: { padding: 24, flexDirection: "row", alignItems: "center" },
@@ -254,7 +249,6 @@ const styles = StyleSheet.create({
   sideMenuContent: { padding: 16 },
   menuItem: { paddingVertical: 12 },
   menuItemText: { fontSize: 16, color: "#374151" },
-
   exitModal: { backgroundColor: "white", borderRadius: 16, padding: 24, marginHorizontal: 32 },
   exitModalTitle: { fontSize: 18, fontWeight: "500", textAlign: "center", marginBottom: 16 },
   exitModalButtons: { flexDirection: "row", gap: 12 },

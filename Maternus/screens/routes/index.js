@@ -14,14 +14,14 @@ const Stack = createNativeStackNavigator();
 export default function Routes() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {/* Login e cadastro */}
+      {/* Telas de login e cadastro */}
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Cadastro" component={CadScreen} />
 
       {/* App principal com tabs */}
       <Stack.Screen name="Main" component={TabNavigator} />
 
-      {/* Telas do stack acima das tabs */}
+      {/* Telas que NÃO devem mostrar a tab */}
       <Stack.Screen name="Notifications" component={Notifications} />
       <Stack.Screen name="Diario" component={DiarioNavigator} />
       <Stack.Screen name="Agenda" component={AgendaNavigator} />
