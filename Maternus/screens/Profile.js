@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import * as ImagePicker from "expo-image-picker";
+import { LinearGradient } from "expo-linear-gradient";
 import { UIContext } from "../UIContext";
 
 export default function Profile({ currentUser, handleUpdateProfile, navigation }) {
@@ -64,7 +65,12 @@ export default function Profile({ currentUser, handleUpdateProfile, navigation }
         keyboardShouldPersistTaps="handled"
       >
         {/* HEADER */}
-        <View style={styles.header}>
+        <LinearGradient
+          colors={["#8B5CF6", "#A855F7", "#C084FC"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.header}
+        >
           <TouchableOpacity
             style={styles.headerButton}
             onPress={() => navigation.goBack()}
@@ -72,7 +78,7 @@ export default function Profile({ currentUser, handleUpdateProfile, navigation }
             <Svg width={24} height={24} fill="none" viewBox="0 0 24 24">
               <Path
                 d="M19 12H5m7-7l-7 7 7 7"
-                stroke="#8B5CF6"
+                stroke="white"
                 strokeWidth={2}
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -80,7 +86,7 @@ export default function Profile({ currentUser, handleUpdateProfile, navigation }
             </Svg>
             <Text style={styles.backText}>Editar meus dados pessoais</Text>
           </TouchableOpacity>
-        </View>
+        </LinearGradient>
 
         {/* AVATAR */}
         <View style={styles.avatarContainer}>
@@ -101,7 +107,9 @@ export default function Profile({ currentUser, handleUpdateProfile, navigation }
               </View>
             )}
           </TouchableOpacity>
-          <Text style={{ color: "#6B7280", marginTop: 8 }}>Toque para trocar a foto</Text>
+          <Text style={{ color: "#6B7280", marginTop: 8 }}>
+            Toque para trocar a foto
+          </Text>
         </View>
 
         {/* INFORMAÇÕES */}
@@ -119,6 +127,7 @@ export default function Profile({ currentUser, handleUpdateProfile, navigation }
               onChangeText={(text) => handleInputChange("nomeCompleto", text)}
               style={styles.input}
               placeholder="Digite seu nome completo"
+              placeholderTextColor="#9CA3AF"
             />
           </View>
 
@@ -129,6 +138,7 @@ export default function Profile({ currentUser, handleUpdateProfile, navigation }
               onChangeText={(text) => handleInputChange("email", text)}
               style={styles.input}
               placeholder="Digite seu e-mail ou telefone"
+              placeholderTextColor="#9CA3AF"
             />
           </View>
 
@@ -137,7 +147,7 @@ export default function Profile({ currentUser, handleUpdateProfile, navigation }
             <TextInput
               value={formData.cpf}
               editable={false}
-              style={[styles.input, { backgroundColor: "#E5E7EB" }]}
+              style={[styles.input, { backgroundColor: "#E5E7EB", color: "#6B7280" }]}
             />
           </View>
 
@@ -150,6 +160,7 @@ export default function Profile({ currentUser, handleUpdateProfile, navigation }
                 onChangeText={(text) => handleInputChange("senha", text)}
                 style={styles.passwordInput}
                 placeholder="Digite sua senha"
+                placeholderTextColor="#9CA3AF"
               />
               <TouchableOpacity
                 style={styles.eyeButton}
@@ -188,7 +199,9 @@ export default function Profile({ currentUser, handleUpdateProfile, navigation }
           </View>
 
           <TouchableOpacity style={styles.updateButton} onPress={handleSubmit}>
-            <Text style={{ color: "white", fontSize: 18, fontWeight: "500" }}>Alterar meus dados</Text>
+            <Text style={{ color: "white", fontSize: 18, fontWeight: "600" }}>
+              Alterar meus dados
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -214,7 +227,7 @@ export default function Profile({ currentUser, handleUpdateProfile, navigation }
                 onPress={() => setSuccessModalOpen(false)}
                 style={styles.okButton}
               >
-                <Text style={{ color: "white", fontWeight: "500" }}>OK</Text>
+                <Text style={{ color: "white", fontWeight: "600" }}>OK</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -225,26 +238,83 @@ export default function Profile({ currentUser, handleUpdateProfile, navigation }
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: "#F3E8FF" },
-  header: { paddingTop: 48, paddingBottom: 24, paddingHorizontal: 24 },
+  header: { paddingTop: 48, paddingBottom: 24, paddingHorizontal: 24, borderBottomLeftRadius: 24, borderBottomRightRadius: 24 },
   headerButton: { flexDirection: "row", alignItems: "center" },
-  backText: { color: "#8B5CF6", fontSize: 16, fontWeight: "500", marginLeft: 8 },
-  avatarContainer: { alignItems: "center", marginBottom: 24 },
-  avatar: { width: 80, height: 80, backgroundColor: "rgba(139,92,246,0.1)", borderRadius: 40, alignItems: "center", justifyContent: "center", borderWidth: 2, borderColor: "#8B5CF6" },
+  backText: { color: "white", fontSize: 16, fontWeight: "500", marginLeft: 8 },
+  avatarContainer: { alignItems: "center", marginVertical: 24 },
+  avatar: {
+    width: 100,
+    height: 100,
+    backgroundColor: "rgba(139,92,246,0.1)",
+    borderRadius: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 3,
+    borderColor: "#8B5CF6",
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 12,
+    elevation: 6,
+  },
   profileInfo: { alignItems: "center", marginBottom: 32 },
-  profileName: { fontSize: 20, fontWeight: "500", color: "#8B5CF6", marginBottom: 4 },
-  profileRole: { fontSize: 16, color: "#9CA3AF" },
+  profileName: { fontSize: 22, fontWeight: "600", color: "#8B5CF6", marginBottom: 4 },
+  profileRole: { fontSize: 16, color: "#6B7280" },
   formContainer: { paddingHorizontal: 24 },
   inputGroup: { marginBottom: 20 },
   inputLabel: { fontSize: 14, fontWeight: "500", color: "#8B5CF6", marginBottom: 8 },
-  input: { padding: 16, fontSize: 16, color: "#1F2937", borderRadius: 12, backgroundColor: "white", elevation: 2 },
-  passwordContainer: { flexDirection: "row", alignItems: "center", backgroundColor: "white", borderRadius: 12, elevation: 2 },
+  input: {
+    padding: 16,
+    fontSize: 16,
+    color: "#1F2937",
+    borderRadius: 16,
+    backgroundColor: "white",
+    elevation: 3,
+  },
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "white",
+    borderRadius: 16,
+    elevation: 3,
+  },
   passwordInput: { flex: 1, padding: 16, fontSize: 16, color: "#1F2937" },
   eyeButton: { padding: 16 },
-  updateButton: { backgroundColor: "#8B5CF6", padding: 16, borderRadius: 16, alignItems: "center", marginTop: 20 },
+  updateButton: {
+    backgroundColor: "#8B5CF6",
+    padding: 16,
+    borderRadius: 20,
+    alignItems: "center",
+    marginTop: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 12,
+    elevation: 6,
+  },
   modalOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center", padding: 16 },
-  successModal: { backgroundColor: "white", borderRadius: 16, padding: 24, alignItems: "center", width: "100%", maxWidth: 400 },
-  successIconContainer: { width: 64, height: 64, backgroundColor: "#D1FAE5", borderRadius: 32, alignItems: "center", justifyContent: "center", marginBottom: 16 },
+  successModal: {
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 24,
+    alignItems: "center",
+    width: "100%",
+    maxWidth: 400,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  successIconContainer: {
+    width: 64,
+    height: 64,
+    backgroundColor: "#D1FAE5",
+    borderRadius: 32,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 16,
+  },
   successModalTitle: { fontSize: 18, fontWeight: "500", color: "#1F2937", textAlign: "center", marginBottom: 16 },
-  okButton: { backgroundColor: "#10B981", borderRadius: 12, paddingVertical: 12, paddingHorizontal: 24, marginTop: 8 },
+  okButton: { backgroundColor: "#10B981", borderRadius: 14, paddingVertical: 12, paddingHorizontal: 32, marginTop: 8 },
 });
