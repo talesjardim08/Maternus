@@ -4,6 +4,8 @@ import DiarioHome from "./screens/diario-home";
 import CapitulosLista from "./screens/capitulos-lista";
 import CapituloDetalhe from "./screens/capitulo-detalhe";
 import RespostasHistorico from "./screens/respostas-historico";
+import ComunidadeScreen from "./screens/comunidade/ComunidadeScreen";
+import NovoPostScreen from "./screens/comunidade/NovoPostScreen"; 
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +19,8 @@ export default function DiarioNavigator() {
       <Stack.Screen name="respostas-historico" component={RespostasHistorico} />
       <Stack.Screen name="capitulos-lista" component={CapitulosLista} />
       <Stack.Screen name="capitulo-detalhe" component={CapituloDetalhe} />
+      <Stack.Screen name="Comunidade" component={ComunidadeScreen} />
+      <Stack.Screen name="NovoPost" component={NovoPostScreen} /> 
     </Stack.Navigator>
   );
 }

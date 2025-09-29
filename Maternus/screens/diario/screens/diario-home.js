@@ -88,8 +88,6 @@ export default function DiarioHome({ navigation }) {
             {/* BOTÃO DE VOLTAR AJUSTADO */}
             <TouchableOpacity
               onPress={() => {
-                console.log("navigation object:", navigation);
-                console.log("canGoBack:", navigation.canGoBack());
                 if (navigation.canGoBack()) {
                   navigation.goBack();
                 } else {
@@ -193,7 +191,11 @@ export default function DiarioHome({ navigation }) {
                 <Image source={c.imagemAtual} style={styles.cardImage} />
                 <View style={styles.cardBottom}>
                   <Text style={styles.cardTitle}>{c.titulo}</Text>
-                  <Ionicons name="add-circle-outline" size={22} color="#6D28D9" />
+                  <Ionicons
+                    name="add-circle-outline"
+                    size={22}
+                    color="#6D28D9"
+                  />
                 </View>
               </TouchableOpacity>
             ))}
@@ -219,6 +221,23 @@ export default function DiarioHome({ navigation }) {
             <Ionicons name="add-circle" size={26} color="#fff" />
           </LinearGradient>
         </TouchableOpacity>
+
+        {/* BOTÃO PARA A COMUNIDADE */}
+        <TouchableOpacity
+          style={styles.communityBtnWrapper}
+          onPress={() => navigation.navigate("Comunidade")}
+          activeOpacity={0.8}
+        >
+          <LinearGradient
+            colors={["#06b6d4", "#3b82f6"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.communityBtn}
+          >
+            <Text style={styles.communityBtnText}>Ir para a Comunidade</Text>
+            <Ionicons name="people" size={26} color="#fff" />
+          </LinearGradient>
+        </TouchableOpacity>
       </ScrollView>
 
       <FormularioDiarioModal
@@ -239,7 +258,11 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
   },
-  headerTop: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
+  headerTop: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
   headerInfo: { flexDirection: "row", alignItems: "center", gap: 10 },
   headerIcon: {
     width: 26,
@@ -250,7 +273,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerTitle: { color: "#fff", fontWeight: "700", fontSize: 20 },
-  headerSubtitle: { color: "white", marginTop: 10, lineHeight: 20, fontSize: 14, opacity: 0.95 },
+  headerSubtitle: {
+    color: "white",
+    marginTop: 10,
+    lineHeight: 20,
+    fontSize: 14,
+    opacity: 0.95,
+  },
 
   dateCard: {
     marginHorizontal: 24,
@@ -287,7 +316,13 @@ const styles = StyleSheet.create({
   },
   formBtnText: { color: "white", fontWeight: "600" },
 
-  lastRow: { flexDirection: "row", alignItems: "center", gap: 6, marginTop: 14, flexWrap: "wrap" },
+  lastRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    marginTop: 14,
+    flexWrap: "wrap",
+  },
   lastText: { color: "#374151", fontSize: 12 },
 
   historyBtn: {
@@ -356,9 +391,29 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 24,
   },
-  addPageText: { 
-    color: "#fff", 
-    fontWeight: "700", 
+  addPageText: {
+    color: "#fff",
+    fontWeight: "700",
     fontSize: 16,
   },
+
+  communityBtnWrapper: {
+    marginTop: 20,
+    marginHorizontal: 24,
+    borderRadius: 16,
+    overflow: "hidden",
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 6,
+  },
+  communityBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+  },
+  communityBtnText: { color: "#fff", fontWeight: "700", fontSize: 16 },
 });
